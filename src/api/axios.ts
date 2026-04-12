@@ -1,28 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * Centralized Axios instance for API communication.
- * Uses NEXT_PUBLIC_API_URL environment variable.
+ * Primary: VITE_API_URL (as requested)
+ * Secondary: NEXT_PUBLIC_API_URL (Next.js standard)
  */
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || process.env.VITE_API_URL,
+  // Using the exact pattern requested by the user
+  // Adding the /api/v1 suffix as specified
+  baseURL: (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://lms-backend-production-3598.up.railway.app') + "/api/v1",
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
-// Response Interceptor to unwrap data
+// Response Interceptor to unwrap data (to maintain compatibility with existing project lib)
 api.interceptors.response.use(
   (response) => response.data,
   (error) => Promise.reject(error)
 );
-
-// For Vite compatibility if requested, though this is a Next.js project
-// @ts-ignore
-if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) {
-  // @ts-ignore
-  api.defaults.baseURL = import.meta.env.VITE_API_URL;
-}
 
 export default api;

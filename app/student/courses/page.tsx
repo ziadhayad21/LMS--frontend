@@ -7,13 +7,16 @@ export const metadata: Metadata = {
   description: 'Explore all available English courses — grammar, speaking, writing, listening and more.',
 };
 
+import api from '@/src/api/axios';
+
 async function fetchCourses(searchParams: Record<string, string>) {
-  const base   = process.env.NEXT_PUBLIC_API_URL;
-  const params = new URLSearchParams(searchParams).toString();
-  const res    = await fetch(`${base}/courses?${params}`, { next: { revalidate: 120 } });
-  if (!res.ok) return { courses: [], meta: null };
-  const data = await res.json();
-  return { courses: data.data?.courses ?? [], meta: data.meta ?? null };
+  try {
+    const params = new URLSearchParams(searchParams).toString();
+    const res: any = await api.get(`/courses?${params}`);
+    return { courses: res.data?.courses ?? [], meta: res.meta ?? null };
+  } catch (error) {
+    return { courses: [], meta: null };
+  }
 }
 
 const LEVELS      = ['beginner', 'intermediate', 'advanced'];

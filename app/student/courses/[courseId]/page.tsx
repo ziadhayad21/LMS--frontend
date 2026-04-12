@@ -4,19 +4,21 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import EnrollButton from '@/components/course/EnrollButton';
 import LessonCard from '@/components/lessons/LessonCard';
+import api from '@/src/api/axios';
 
 interface Props { params: { courseId: string } }
 
+const API_BASE = (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://lms-backend-production-3598.up.railway.app').replace(/\/api\/v1$/, '');
+
 async function fetchCourse(courseId: string, token?: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const headers: HeadersInit = token ? { Cookie: `jwt=${token}` } : {};
-  const res = await fetch(`${base}/courses/${courseId}`, {
-    headers,
-    next: { revalidate: 120 },
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data?.course ?? null;
+  try {
+    const res: any = await api.get(`/courses/${courseId}`, {
+      headers: token ? { Cookie: `jwt=${token}` } : {},
+    });
+    return res.data?.course ?? null;
+  } catch (error) {
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -106,7 +108,7 @@ export default async function CourseDetailPage({ params }: Props) {
             {course.materials?.map((mat: any) => (
               <a
                 key={mat._id}
-                href={`/api/v1/courses/${course._id}/materials/${mat._id}/download`}
+                href={`${API_BASE}/api/v1/courses/${course._id}/materials/${mat._id}/download`}
                 className="card p-4 flex items-center gap-3 hover:border-primary-200 transition-colors group"
               >
                 <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
