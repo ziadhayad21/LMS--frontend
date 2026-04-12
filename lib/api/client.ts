@@ -21,39 +21,8 @@ export type ApiClient = {
 
 const rawClient = api;
 
-
-// ─── Request Interceptor ──────────────────────────────────────────────────────
-rawClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => config,
-  (error) => Promise.reject(error)
-);
-
-// ─── Response Interceptor ─────────────────────────────────────────────────────
-rawClient.interceptors.response.use(
-  (response: AxiosResponse) => response.data, // Unwrap .data automatically
-  (error: AxiosError<{ message: string; status: string }>) => {
-    const message =
-      error.response?.data?.message
-      ?? (error.code === 'ECONNABORTED' ? 'Upload timed out. Please try again with a smaller file or a faster connection.' : undefined)
-      ?? (error.message === 'Network Error' ? 'Network error while contacting the server. Check server availability and CORS settings.' : undefined)
-      ?? error.message
-      ?? 'An unexpected error occurred.';
-    const statusCode = error.response?.status;
-
-    // Redirect to login on 401 (client-side only)
-    if (statusCode === 401 && typeof window !== 'undefined') {
-      const isLoginPage = window.location.pathname.startsWith('/login');
-      if (!isLoginPage) {
-        window.location.href = '/login';
-        return Promise.reject({ message, statusCode });
-      }
-    }
-
-
-
-    return Promise.reject({ message, statusCode });
-  }
-);
+// Note: No additional response interceptor here to avoid double-unwrapping of response.data
+// Errors are still handled by the underlying api instance or can be added as a separate layer if needed.
 
 export const apiClient = rawClient as unknown as ApiClient;
 
