@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || "https://lms-backend-production-3598.up.railway.app";
+// By default, we use an empty string as API_URL so it relative (e.g. /api/v1)
+// This leverages the Next.js rewrites defined in next.config.js to avoid cross-domain cookie issues.
+const API_URL = typeof window !== 'undefined' ? '' : (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || "https://lms-backend-production-3598.up.railway.app");
 
 const api = axios.create({
   baseURL: API_URL + "/api/v1",
