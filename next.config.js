@@ -5,8 +5,7 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      { protocol: 'http',  hostname: 'localhost', port: '5000', pathname: '/uploads/**' },
-      { protocol: 'https', hostname: 'your-production-domain.com', pathname: '/uploads/**' },
+      { protocol: 'https', hostname: 'lms-backend-production-3598.up.railway.app', pathname: '/uploads/**' },
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
