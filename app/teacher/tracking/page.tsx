@@ -8,15 +8,17 @@ export const metadata: Metadata = {
   description: 'Monitor student activity and progress.',
 };
 
+import api from '@/src/api/axios';
+
 async function fetchTracking(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/progress/tracking`, {
-    headers: { Cookie: `jwt=${token}` },
-    next: { revalidate: 15 },
-  });
-  if (!res.ok) return null;
-  const json = await res.json();
-  return json.data?.tracking ?? [];
+  try {
+    const res: any = await api.get('/progress/tracking', {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.tracking ?? [];
+  } catch (error) {
+    return null;
+  }
 }
 
 export default async function TrackingPage() {

@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import LessonListClient from './LessonListClient';
+import api from '@/src/api/axios';
 
 export const metadata: Metadata = {
   title: 'All Lessons',
@@ -10,15 +11,14 @@ export const metadata: Metadata = {
 };
 
 async function fetchLessons(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/lessons`, {
-    headers: { Cookie: `jwt=${token}` },
-    cache: 'no-store', // ensuring it's fresh for CRUD
-  });
-
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data?.lessons || [];
+  try {
+    const res: any = await api.get('/lessons', {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.lessons || [];
+  } catch (error) {
+    return [];
+  }
 }
 
 export default async function TeacherLessonsPage() {

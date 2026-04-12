@@ -11,55 +11,37 @@ export const metadata: Metadata = {
   description: 'Manage academic lessons and student approvals.',
 };
 
+import api from '@/src/api/axios';
+
 async function fetchTeacherDashboard(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const [dashboardRes, lessonsRes, pendingRes, trackingRes] = await Promise.all([
-    fetch(`${base}/api/v1/courses/teacher/dashboard`, {
-      headers: { Cookie: `jwt=${token}` },
-      next: { revalidate: 30 },
-    }),
-    fetch(`${base}/api/v1/lessons`, {
-      headers: { Cookie: `jwt=${token}` },
-      next: { revalidate: 30 },
-    }),
-    fetch(`${base}/api/v1/auth/students?status=pending`, {
-      headers: { Cookie: `jwt=${token}` },
-      next: { revalidate: 15 },
-    }),
-    fetch(`${base}/api/v1/progress/tracking`, {
-      headers: { Cookie: `jwt=${token}` },
-      next: { revalidate: 15 },
-    }),
-  ]);
+  try {
+    const [dashboardRes, lessonsRes, pendingRes, trackingRes]: any = await Promise.all([
+      api.get('/courses/teacher/dashboard', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/lessons',                    { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/auth/students?status=pending', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/progress/tracking',          { headers: { Cookie: `jwt=${token}` } }),
+    ]);
 
-  if (!dashboardRes.ok) return null;
-
-  const [dashboard, lessons, pending, tracking] = await Promise.all([
-    dashboardRes.json(),
-    lessonsRes.ok ? lessonsRes.json() : Promise.resolve({ data: { lessons: [] } }),
-    pendingRes.ok ? pendingRes.json() : Promise.resolve({ data: { students: [] } }),
-    trackingRes.ok ? trackingRes.json() : Promise.resolve({ data: { tracking: [] } }),
-  ]);
-
-  return {
-    stats: dashboard.data ?? null,
-    lessons: lessons.data?.lessons ?? [],
-    pendingStudents: pending.data?.students ?? [],
-    tracking: tracking.data?.tracking ?? [],
-  };
+    return {
+      stats: dashboardRes.data ?? null,
+      lessons: lessonsRes.data?.lessons ?? [],
+      pendingStudents: pendingRes.data?.students ?? [],
+      tracking: trackingRes.data?.tracking ?? [],
+    };
+  } catch (error) {
+    return null;
+  }
 }
 
 async function approveStudent(token: string, studentId: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  await fetch(`${base}/api/v1/auth/students/${studentId}/status`, {
-    method: 'PATCH',
-    body: JSON.stringify({ status: 'active' }),
-    cache: 'no-store',
-    headers: {
-      Cookie: `jwt=${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    await api.patch(`/auth/students/${studentId}/status`, 
+      { status: 'active' },
+      { headers: { Cookie: `jwt=${token}` } }
+    );
+  } catch (error) {
+    console.error('Failed to approve student:', error);
+  }
 }
 
 export default async function TeacherDashboardPage({

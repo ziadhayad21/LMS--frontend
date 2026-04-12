@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 async function fetchLessonData(courseId: string, lessonId: string, token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/courses/${courseId}/lessons/${lessonId}`, {
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${base}/courses/${courseId}/lessons/${lessonId}`, {
     headers: { Cookie: `jwt=${token}` },
     cache: 'no-store',
   });

@@ -11,29 +11,24 @@ export const metadata: Metadata = {
   description: 'Track your English learning progress, completed lessons, and exam scores.',
 };
 
+import api from '@/src/api/axios';
+
 async function fetchDashboardData(token: string) {
-  const headers = { Cookie: `jwt=${token}` };
-  const base    = process.env.API_URL || 'http://localhost:5000';
+  try {
+    const [progressRes, resultsRes, userRes]: any = await Promise.all([
+      api.get('/progress/overview', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/results/my',         { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/auth/me',            { headers: { Cookie: `jwt=${token}` } }),
+    ]);
 
-  const [progressRes, resultsRes, userRes] = await Promise.all([
-    fetch(`${base}/api/v1/progress/overview`, { headers, next: { revalidate: 60 } }),
-    fetch(`${base}/api/v1/results/my`,         { headers, next: { revalidate: 60 } }),
-    fetch(`${base}/api/v1/auth/me`,            { headers, next: { revalidate: 60 } }),
-  ]);
-
-  if (!progressRes.ok) return { progresses: [], results: [], user: null };
-
-  const [progressData, resultsData, userData] = await Promise.all([
-    progressRes.json(),
-    resultsRes.json(),
-    userRes.json(),
-  ]);
-
-  return {
-    progresses: progressData.data?.progresses ?? [],
-    results:    resultsData.data?.results     ?? [],
-    user:       userData.data?.user           ?? null,
-  };
+    return {
+      progresses: progressRes.data?.progresses ?? [],
+      results:    resultsRes.data?.results     ?? [],
+      user:       userRes.data?.user           ?? null,
+    };
+  } catch (error) {
+    return { progresses: [], results: [], user: null };
+  }
 }
 
 

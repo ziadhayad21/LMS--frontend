@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 };
 
 async function fetchLessons(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/lessons`, {
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${base}/lessons`, {
     headers: { Cookie: `jwt=${token}` },
     next: { revalidate: 30 },
   });

@@ -8,9 +8,9 @@ import LessonCard from '@/components/lessons/LessonCard';
 interface Props { params: { courseId: string } }
 
 async function fetchCourse(courseId: string, token?: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
+  const base = process.env.NEXT_PUBLIC_API_URL;
   const headers: HeadersInit = token ? { Cookie: `jwt=${token}` } : {};
-  const res = await fetch(`${base}/api/v1/courses/${courseId}`, {
+  const res = await fetch(`${base}/courses/${courseId}`, {
     headers,
     next: { revalidate: 120 },
   });

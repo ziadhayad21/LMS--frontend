@@ -8,14 +8,18 @@ export const metadata: Metadata = {
   description: 'Track your learning progress across all enrolled English courses.',
 };
 
+import api from '@/src/api/axios';
+
 async function fetchProgress(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const [progRes, resRes] = await Promise.all([
-    fetch(`${base}/api/v1/progress/overview`, { headers: { Cookie: `jwt=${token}` }, next: { revalidate: 60 } }),
-    fetch(`${base}/api/v1/results/my`,         { headers: { Cookie: `jwt=${token}` }, next: { revalidate: 60 } }),
-  ]);
-  const [p, r] = await Promise.all([progRes.json(), resRes.json()]);
-  return { progresses: p.data?.progresses ?? [], results: r.data?.results ?? [] };
+  try {
+    const [p, r]: any = await Promise.all([
+      api.get('/progress/overview', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/results/my',         { headers: { Cookie: `jwt=${token}` } }),
+    ]);
+    return { progresses: p.data?.progresses ?? [], results: r.data?.results ?? [] };
+  } catch (error) {
+    return { progresses: [], results: [] };
+  }
 }
 
 export default async function ProgressPage() {

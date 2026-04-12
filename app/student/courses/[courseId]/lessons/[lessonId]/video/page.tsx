@@ -40,7 +40,7 @@ export default function VideoLessonPage() {
     }
   };
 
-  const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace('/api/v1', '').replace(/\/$/, '');
+  const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace('/api/v1', '').replace(/\/$/, '');
   const videoUrl = lesson?.videoUrl
     ? lesson.videoUrl
     : lesson?.videoFile?.filename

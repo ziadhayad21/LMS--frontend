@@ -20,7 +20,7 @@ interface LessonCardProps {
 
 
 export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps) {
-  const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace('/api/v1', '').replace(/\/$/, '');
+  const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace('/api/v1', '').replace(/\/$/, '');
   const pdfUrl = lesson.pdfFile?.filename ? `${apiBase}/uploads/lessons/${lesson.pdfFile.filename}` : null;
 
   // Extract courseId safely (handle if it's an object or string)

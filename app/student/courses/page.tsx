@@ -8,9 +8,9 @@ export const metadata: Metadata = {
 };
 
 async function fetchCourses(searchParams: Record<string, string>) {
-  const base   = process.env.API_URL || 'http://localhost:5000';
+  const base   = process.env.NEXT_PUBLIC_API_URL;
   const params = new URLSearchParams(searchParams).toString();
-  const res    = await fetch(`${base}/api/v1/courses?${params}`, { next: { revalidate: 120 } });
+  const res    = await fetch(`${base}/courses?${params}`, { next: { revalidate: 120 } });
   if (!res.ok) return { courses: [], meta: null };
   const data = await res.json();
   return { courses: data.data?.courses ?? [], meta: data.meta ?? null };

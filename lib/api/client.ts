@@ -4,8 +4,9 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import api from '@/src/api/axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const UPLOAD_TIMEOUT_MS = 10 * 60 * 1000; // Large video uploads can take several minutes
 
 /** Client whose response interceptor returns `response.data` (unwrapped). */
@@ -18,12 +19,8 @@ export type ApiClient = {
   interceptors: ReturnType<typeof axios.create>['interceptors'];
 };
 
-const rawClient = axios.create({
-  baseURL:         BASE_URL,
-  withCredentials: true,           // Send HTTP-only cookie on every request
-  timeout:         30_000,
-  // Removed default Content-Type to let Axios handle FormData boundaries automatically
-});
+const rawClient = api;
+
 
 // ─── Request Interceptor ──────────────────────────────────────────────────────
 rawClient.interceptors.request.use(

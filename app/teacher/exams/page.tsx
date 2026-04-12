@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 async function fetchExams(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/exams`, {
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${base}/exams`, {
     headers: { Cookie: `jwt=${token}` },
     cache: 'no-store',
   });

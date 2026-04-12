@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation';
 import ExamTaker from '@/components/exams/ExamTaker';
 
 async function fetchExam(examId: string, token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res = await fetch(`${base}/api/v1/exams/${examId}`, {
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${base}/exams/${examId}`, {
     headers: { Cookie: `jwt=${token}` },
     cache: 'no-store',
   });

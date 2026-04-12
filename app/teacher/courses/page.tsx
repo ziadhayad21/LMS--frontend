@@ -6,9 +6,9 @@ import Link from 'next/link';
 export const metadata: Metadata = { title: 'My Courses' };
 
 async function fetchMyCourses(token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
+  const base = process.env.NEXT_PUBLIC_API_URL;
   // Teacher fetches all their courses (including drafts) — no isPublished filter
-  const res = await fetch(`${base}/api/v1/courses?limit=100`, {
+  const res = await fetch(`${base}/courses?limit=100`, {
     headers: { Cookie: `jwt=${token}` },
     next: { revalidate: 30 },
   });

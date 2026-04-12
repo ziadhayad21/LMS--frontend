@@ -7,8 +7,8 @@ interface Props { params: { courseId: string; examId: string } }
 export const metadata: Metadata = { title: 'Exam Results' };
 
 async function fetchResults(courseId: string, token: string) {
-  const base = process.env.API_URL || 'http://localhost:5000';
-  const res  = await fetch(`${base}/api/v1/results/course/${courseId}`, {
+  const base = process.env.NEXT_PUBLIC_API_URL;
+  const res  = await fetch(`${base}/results/course/${courseId}`, {
     headers: { Cookie: `jwt=${token}` },
     next: { revalidate: 30 },
   });
