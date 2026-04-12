@@ -5,12 +5,16 @@ import axios from "axios";
  * Primary: VITE_API_URL (as requested)
  * Secondary: NEXT_PUBLIC_API_URL (Next.js standard)
  */
-// Using the domain directly to handle leading-slash paths correctly
-const API_URL = (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://lms-backend-production-3598.up.railway.app').replace(/\/$/, '');
+// We now use relative paths on the CLIENT so Next.js Rewrites can proxy the request to the Railway backend
+// This solves ALL CORS and Cross-Domain Cookie (jwt) SameSite issues!
+// However, on the SERVER (Next.js SSR), relative paths fail because Node has no 'origin'. We must hit the backend directly.
+const IS_SERVER = typeof window === 'undefined';
+const API_URL = IS_SERVER 
+  ? (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://lms-backend-production-3598.up.railway.app').replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
+  : '';
 
 const api = axios.create({
-  // Setting the baseURL to the Railway domain root + prefix
-  // Removing the leading slash from the prefix logic if we want to use relative paths
+  // Setting the baseURL to relative prefix handled by Next.js rewrites on client
   baseURL: `${API_URL}/api/v1/`,
   withCredentials: true,
 });

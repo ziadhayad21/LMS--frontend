@@ -11,6 +11,15 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
 
+  async rewrites() {
+    return [
+      {
+        source: '/api/v1/:path*',
+        destination: 'https://lms-backend-production-3598.up.railway.app/api/v1/:path*', // Proxy to Backend
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
