@@ -6,15 +6,17 @@ interface Props { params: { courseId: string } }
 
 export const metadata: Metadata = { title: 'Enrolled Students' };
 
+import api from '@/src/api/axios';
+
 async function fetchStudents(courseId: string, token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const res  = await fetch(`${base}/courses/${courseId}/students`, {
-    headers: { Cookie: `jwt=${token}` },
-    next: { revalidate: 30 },
-  });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data?.students ?? [];
+  try {
+    const res: any = await api.get(`/courses/${courseId}/students`, {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.students ?? [];
+  } catch (error) {
+    return [];
+  }
 }
 
 export default async function StudentsPage({ params }: Props) {

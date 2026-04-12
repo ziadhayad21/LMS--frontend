@@ -9,16 +9,17 @@ export const metadata: Metadata = {
   description: 'Preview the video and content of your lesson.',
 };
 
-async function fetchLessonData(courseId: string, lessonId: string, token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${base}/courses/${courseId}/lessons/${lessonId}`, {
-    headers: { Cookie: `jwt=${token}` },
-    cache: 'no-store',
-  });
+import api from '@/src/api/axios';
 
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data?.lesson || null;
+async function fetchLessonData(courseId: string, lessonId: string, token: string) {
+  try {
+    const res: any = await api.get(`/courses/${courseId}/lessons/${lessonId}`, {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.lesson || null;
+  } catch (error) {
+    return null;
+  }
 }
 
 export default async function LessonPreviewPage({

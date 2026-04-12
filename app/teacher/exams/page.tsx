@@ -10,16 +10,17 @@ export const metadata: Metadata = {
   description: 'Manage all your created exams.',
 };
 
-async function fetchExams(token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${base}/exams`, {
-    headers: { Cookie: `jwt=${token}` },
-    cache: 'no-store',
-  });
+import api from '@/src/api/axios';
 
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data?.exams || [];
+async function fetchExams(token: string) {
+  try {
+    const res: any = await api.get('/exams', {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.exams || [];
+  } catch (error) {
+    return [];
+  }
 }
 
 export default async function TeacherExamsPage() {

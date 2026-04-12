@@ -5,16 +5,17 @@ import Link from 'next/link';
 
 export const metadata: Metadata = { title: 'My Courses' };
 
+import api from '@/src/api/axios';
+
 async function fetchMyCourses(token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  // Teacher fetches all their courses (including drafts) — no isPublished filter
-  const res = await fetch(`${base}/courses?limit=100`, {
-    headers: { Cookie: `jwt=${token}` },
-    next: { revalidate: 30 },
-  });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data?.courses ?? [];
+  try {
+    const res: any = await api.get('/courses?limit=100', {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.courses ?? [];
+  } catch (error) {
+    return [];
+  }
 }
 
 const levelColors: Record<string, string> = {

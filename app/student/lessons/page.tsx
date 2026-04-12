@@ -7,16 +7,17 @@ export const metadata: Metadata = {
   description: 'View all approved academic English lessons.',
 };
 
-async function fetchLessons(token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const res = await fetch(`${base}/lessons`, {
-    headers: { Cookie: `jwt=${token}` },
-    next: { revalidate: 30 },
-  });
+import api from '@/src/api/axios';
 
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data?.lessons ?? [];
+async function fetchLessons(token: string) {
+  try {
+    const res: any = await api.get('/lessons', {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.lessons ?? [];
+  } catch (error) {
+    return [];
+  }
 }
 
 import LessonCard from '@/components/lessons/LessonCard';

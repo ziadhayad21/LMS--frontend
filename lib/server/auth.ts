@@ -6,13 +6,10 @@ export async function getServerAuthUser() {
   if (!token) return null;
 
   try {
-    const res = await api.get('auth/me', {
+    const res: any = await api.get('/auth/me', {
       headers: { Cookie: `jwt=${token}` },
     });
-    // @ts-ignore - axios returns data directly because of our interceptor or standard usage
-    // Actually, in our src/api/axios.ts we didn't add the unwrap interceptor yet.
-    // I should add it to matchApiClient or just handle it here.
-    return res.data?.data?.user ?? res.data?.user ?? null;
+    return res.data?.user ?? null;
   } catch (error) {
     return null;
   }

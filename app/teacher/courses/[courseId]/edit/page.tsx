@@ -6,15 +6,17 @@ import Link from 'next/link';
 
 interface Props { params: { courseId: string } }
 
+import api from '@/src/api/axios';
+
 async function fetchCourse(courseId: string, token: string) {
-  const base = process.env.NEXT_PUBLIC_API_URL;
-  const res  = await fetch(`${base}/courses/${courseId}`, {
-    headers: { Cookie: `jwt=${token}` },
-    cache: 'no-store',
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.data?.course ?? null;
+  try {
+    const res: any = await api.get(`/courses/${courseId}`, {
+      headers: { Cookie: `jwt=${token}` },
+    });
+    return res.data?.course ?? null;
+  } catch (error) {
+    return null;
+  }
 }
 
 export const metadata: Metadata = { title: 'Edit Course' };
