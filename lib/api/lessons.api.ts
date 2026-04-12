@@ -6,13 +6,13 @@ interface LessonResponse  extends ApiSuccess<{ lesson:  Lesson    }> {}
 
 export const lessonApi = {
   list: (courseId: string): Promise<LessonsResponse> =>
-    apiClient.get(`/courses/${courseId}/lessons`),
+    apiClient.get(`courses/${courseId}/lessons`),
 
   getLesson: (courseId: string, lessonId: string): Promise<LessonResponse> =>
-    apiClient.get(`/courses/${courseId}/lessons/${lessonId}`),
+    apiClient.get(`courses/${courseId}/lessons/${lessonId}`),
 
   listAll: (): Promise<LessonsResponse> =>
-    apiClient.get('/lessons'),
+    apiClient.get('lessons'),
 
   create: (courseId: string, payload: CreateLessonPayload, videoFile?: File, pdfFile?: File): Promise<LessonResponse> => {
     if (videoFile || pdfFile) {
@@ -22,9 +22,9 @@ export const lessonApi = {
       });
       if (videoFile) fd.append('video', videoFile);
       if (pdfFile)   fd.append('pdf', pdfFile);
-      return apiUpload<LessonResponse>(`/courses/${courseId}/lessons`, fd);
+      return apiUpload<LessonResponse>(`courses/${courseId}/lessons`, fd);
     }
-    return apiClient.post(`/courses/${courseId}/lessons`, payload);
+    return apiClient.post(`courses/${courseId}/lessons`, payload);
   },
 
   createAcademic: (payload: CreateLessonPayload, videoFile?: File, pdfFile?: File): Promise<LessonResponse> => {
@@ -35,9 +35,9 @@ export const lessonApi = {
       });
       if (videoFile) fd.append('video', videoFile);
       if (pdfFile)   fd.append('pdf', pdfFile);
-      return apiUpload<LessonResponse>('/lessons', fd);
+      return apiUpload<LessonResponse>('lessons', fd);
     }
-    return apiClient.post('/lessons', payload);
+    return apiClient.post('lessons', payload);
   },
 
   update: (courseId: string, lessonId: string, payload: Partial<CreateLessonPayload>, videoFile?: File, pdfFile?: File): Promise<LessonResponse> => {
@@ -48,13 +48,13 @@ export const lessonApi = {
       });
       if (videoFile) fd.append('video', videoFile);
       if (pdfFile)   fd.append('pdf', pdfFile);
-      return apiUpload<LessonResponse>(`/courses/${courseId}/lessons/${lessonId}`, fd, 'patch');
+      return apiUpload<LessonResponse>(`courses/${courseId}/lessons/${lessonId}`, fd, 'patch');
     }
-    return apiClient.patch(`/courses/${courseId}/lessons/${lessonId}`, payload);
+    return apiClient.patch(`courses/${courseId}/lessons/${lessonId}`, payload);
   },
 
   delete: (courseId: string, lessonId: string): Promise<void> =>
-    apiClient.delete(`/courses/${courseId}/lessons/${lessonId}`),
+    apiClient.delete(`courses/${courseId}/lessons/${lessonId}`),
 
   completeLesson: (
     courseId: string,
@@ -63,7 +63,7 @@ export const lessonApi = {
     totalDurationSeconds = 0,
     watchedRanges: Array<{ start: number; end: number }> = [],
   ): Promise<ApiSuccess<any>> =>
-    apiClient.post(`/courses/${courseId}/lessons/${lessonId}/complete`, {
+    apiClient.post(`courses/${courseId}/lessons/${lessonId}/complete`, {
       watchTimeSeconds,
       totalDurationSeconds,
       watchedRanges,
