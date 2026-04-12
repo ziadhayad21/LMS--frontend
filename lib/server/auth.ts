@@ -6,7 +6,7 @@ export async function getServerAuthUser() {
   if (!token) return null;
 
   try {
-    const res = await api.get('/auth/me', {
+    const res = await api.get('auth/me', {
       headers: { Cookie: `jwt=${token}` },
     });
     // @ts-ignore - axios returns data directly because of our interceptor or standard usage
