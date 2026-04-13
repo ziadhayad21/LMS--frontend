@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import DeleteCourseButton from '@/components/course/DeleteCourseButton';
 
 export const metadata: Metadata = { title: 'My Courses' };
 
@@ -92,12 +93,13 @@ export default async function TeacherCoursesPage() {
                 </div>
 
                 <div className="mt-4 flex gap-2">
-                  <Link href={`/teacher/courses/${course._id}`} className="flex-1 px-4 py-2.5 bg-slate-900 hover:bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl text-center transition-all">
+                  <Link href={`/teacher/courses/${course._id}`} className="flex-1 px-4 py-2.5 bg-slate-900 hover:bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl text-center transition-all shadow-md">
                     Manage
                   </Link>
                   <Link href={`/teacher/courses/${course._id}/edit`} className="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all">
                     Edit
                   </Link>
+                  <DeleteCourseButton courseId={course._id} />
                 </div>
               </div>
             </div>
