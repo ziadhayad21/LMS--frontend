@@ -50,7 +50,7 @@ function PdfViewerInner() {
         <div className="min-w-0">
           <h1 className="page-title truncate">{title}</h1>
           <p className="text-sm text-slate-500 mt-1">
-            If the PDF doesn't load, use the download button.
+            If the PDF doesn&apos;t load, use the download button.
           </p>
         </div>
         {pdfUrl ? (
