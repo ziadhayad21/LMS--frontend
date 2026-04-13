@@ -7,44 +7,58 @@ import type { CreateExamPayload, Question } from '@/types';
 import clsx from 'clsx';
 
 interface QuestionDraft {
-  id:                 string; // local draft id
-  questionText:       string;
-  options:            string[];
+  id: string; // local draft id
+  questionText: string;
+  options: string[];
   correctOptionIndex: number;
-  explanation:        string;
-  points:             number;
+  explanation: string;
+  points: number;
 }
 
 const blankQuestion = (): QuestionDraft => ({
-  id:                 crypto.randomUUID(),
-  questionText:       '',
-  options:            ['', '', '', ''],
+  id: crypto.randomUUID(),
+  questionText: '',
+  options: ['', '', '', ''],
   correctOptionIndex: 0,
-  explanation:        '',
-  points:             1,
+  explanation: '',
+  points: 1,
 });
 
 const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-interface Props { courseId: string }
+interface Props {
+  courseId: string;
+  initialData?: any;
+}
 
-export default function ExamBuilder({ courseId }: Props) {
+export default function ExamBuilder({ courseId, initialData }: Props) {
   const router = useRouter();
 
+  const isEdit = !!initialData;
+
   // Exam-level state
-  const [title,        setTitle]        = useState('');
-  const [description,  setDescription]  = useState('');
-  const [timeLimit,    setTimeLimit]    = useState('');
-  const [passingScore, setPassingScore] = useState('60');
-  const [maxAttempts,  setMaxAttempts]  = useState('3');
-  const [shuffle,      setShuffle]      = useState(false);
+  const [title, setTitle] = useState(initialData?.title ?? '');
+  const [description, setDescription] = useState(initialData?.description ?? '');
+  const [timeLimit, setTimeLimit] = useState(initialData?.timeLimit?.toString() ?? '');
+  const [passingScore, setPassingScore] = useState(initialData?.passingScore?.toString() ?? '60');
+  const [maxAttempts, setMaxAttempts] = useState(initialData?.maxAttempts?.toString() ?? '3');
+  const [shuffle, setShuffle] = useState(initialData?.shuffleQuestions ?? false);
 
   // Questions state
-  const [questions, setQuestions] = useState<QuestionDraft[]>([blankQuestion()]);
-  const [expanded,  setExpanded]  = useState<string>(questions[0].id);
+  const [questions, setQuestions] = useState<QuestionDraft[]>(
+    initialData?.questions?.map((q: any) => ({
+      id: crypto.randomUUID(),
+      questionText: q.questionText,
+      options: q.options,
+      correctOptionIndex: q.correctOptionIndex,
+      explanation: q.explanation ?? '',
+      points: q.points ?? 1,
+    })) ?? [blankQuestion()]
+  );
+  const [expanded, setExpanded] = useState<string>(questions[0].id);
 
   const [saving, setSaving] = useState(false);
-  const [error,  setError]  = useState('');
+  const [error, setError] = useState('');
 
   // ─── Question Mutations ───────────────────────────────────────────────────
 
@@ -104,7 +118,7 @@ export default function ExamBuilder({ courseId }: Props) {
 
   const moveQuestion = useCallback((id: string, dir: 'up' | 'down') => {
     setQuestions((prev) => {
-      const idx  = prev.findIndex((q) => q.id === id);
+      const idx = prev.findIndex((q) => q.id === id);
       const next = [...prev];
       const swap = dir === 'up' ? idx - 1 : idx + 1;
       if (swap < 0 || swap >= next.length) return prev;
@@ -116,11 +130,11 @@ export default function ExamBuilder({ courseId }: Props) {
   // ─── Validation ───────────────────────────────────────────────────────────
 
   const validate = (): string => {
-    if (!title.trim())         return 'Exam title is required.';
+    if (!title.trim()) return 'Exam title is required.';
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
-      if (!q.questionText.trim())               return `Question ${i + 1}: question text is required.`;
-      if (q.options.some((o) => !o.trim()))     return `Question ${i + 1}: all options must be filled in.`;
+      if (!q.questionText.trim()) return `Question ${i + 1}: question text is required.`;
+      if (q.options.some((o) => !o.trim())) return `Question ${i + 1}: all options must be filled in.`;
       if (q.correctOptionIndex >= q.options.length) return `Question ${i + 1}: correct answer selection is invalid.`;
     }
     return '';
@@ -136,23 +150,27 @@ export default function ExamBuilder({ courseId }: Props) {
     setError('');
     try {
       const payload: CreateExamPayload = {
-        title:            title.trim(),
-        description:      description.trim() || undefined,
-        timeLimit:        timeLimit ? parseInt(timeLimit, 10) : undefined,
-        passingScore:     parseInt(passingScore, 10),
-        maxAttempts:      parseInt(maxAttempts, 10),
+        title: title.trim(),
+        description: description.trim() || undefined,
+        timeLimit: timeLimit ? parseInt(timeLimit, 10) : undefined,
+        passingScore: parseInt(passingScore, 10),
+        maxAttempts: parseInt(maxAttempts, 10),
         shuffleQuestions: shuffle,
-        isPublished:      publish,
-        questions:        questions.map(({ id, ...q }) => ({
-          questionText:       q.questionText.trim(),
-          options:            q.options.map((o) => o.trim()),
+        isPublished: publish,
+        questions: questions.map(({ id, ...q }) => ({
+          questionText: q.questionText.trim(),
+          options: q.options.map((o) => o.trim()),
           correctOptionIndex: q.correctOptionIndex,
-          explanation:        q.explanation.trim() || undefined,
-          points:             q.points,
+          explanation: q.explanation.trim() || undefined,
+          points: q.points,
         })),
       } as any;
 
-      await examApi.createCourseExam(courseId, payload);
+      if (isEdit) {
+        await examApi.updateCourseExam(courseId, initialData._id, payload);
+      } else {
+        await examApi.createCourseExam(courseId, payload);
+      }
       router.push(`/teacher/courses/${courseId}`);
       router.refresh();
     } catch (e: any) {
@@ -310,18 +328,18 @@ export default function ExamBuilder({ courseId }: Props) {
 // ─── Sub-component: Question Accordion ───────────────────────────────────────
 
 interface AccordionProps {
-  question:       QuestionDraft;
-  index:          number;
-  total:          number;
-  isExpanded:     boolean;
-  onToggle:       () => void;
-  onUpdate:       (patch: Partial<QuestionDraft>) => void;
+  question: QuestionDraft;
+  index: number;
+  total: number;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onUpdate: (patch: Partial<QuestionDraft>) => void;
   onOptionChange: (optIdx: number, value: string) => void;
-  onAddOption:    () => void;
+  onAddOption: () => void;
   onRemoveOption: (optIdx: number) => void;
-  onRemove:       () => void;
-  onMoveUp:       () => void;
-  onMoveDown:     () => void;
+  onRemove: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
 }
 
 function QuestionAccordion({

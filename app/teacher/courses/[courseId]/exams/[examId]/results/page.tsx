@@ -20,7 +20,7 @@ async function fetchResults(courseId: string, token: string) {
 }
 
 export default async function ExamResultsPage({ params }: Props) {
-  const token   = cookies().get('jwt')?.value ?? '';
+  const token = cookies().get('jwt')?.value ?? '';
   const allResults = await fetchResults(params.courseId, token);
   // Filter to just this exam
   const results = allResults.filter((r: any) => r.exam?._id === params.examId || r.exam === params.examId);
@@ -72,6 +72,7 @@ export default async function ExamResultsPage({ params }: Props) {
                 <th className="text-left px-5 py-3.5 font-semibold text-slate-600">Status</th>
                 <th className="text-left px-5 py-3.5 font-semibold text-slate-600">Attempt</th>
                 <th className="text-left px-5 py-3.5 font-semibold text-slate-600">Date</th>
+                <th className="text-right px-5 py-3.5 font-semibold text-slate-600">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -95,6 +96,14 @@ export default async function ExamResultsPage({ params }: Props) {
                   <td className="px-5 py-4 text-slate-600">#{r.attemptNumber}</td>
                   <td className="px-5 py-4 text-slate-400">
                     {new Date(r.completedAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-5 py-4 text-right">
+                    <Link
+                      href={`/teacher/courses/${params.courseId}/exams/${params.examId}/results/${r._id}`}
+                      className="text-indigo-600 hover:text-indigo-800 font-black text-[10px] uppercase tracking-widest bg-indigo-50 px-3 py-1.5 rounded-lg"
+                    >
+                      View Details
+                    </Link>
                   </td>
                 </tr>
               ))}

@@ -91,58 +91,97 @@ export default async function BrowseCoursesPage({ searchParams }: Props) {
           {courses.map((course: any) => (
             <div
               key={course._id}
-              className="card flex flex-col overflow-hidden hover:shadow-lg border-slate-200 hover:border-primary-300 transition-all group bg-white"
+              className="group relative flex flex-col bg-white rounded-[2rem] overflow-hidden border border-slate-100 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(79,70,229,0.1)] hover:-translate-y-2"
             >
-              {/* Thumbnail */}
-              <Link href={isManagement ? `/teacher/courses/${course._id}` : `/student/courses/${course._id}`} className="block overflow-hidden relative h-44">
-                <div className="h-full bg-slate-100 flex items-center justify-center">
-                  {course.thumbnailUrl
-                    ? (
-                      <Image
-                        src={course.thumbnailUrl}
-                        alt={course.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    )
-                    : <span className="text-5xl opacity-30">📚</span>}
+              {/* Thumbnail / Image Container */}
+              <div className="relative h-48 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                <Link href={isManagement ? `/teacher/courses/${course._id}` : `/student/courses/${course._id}`} className="block h-full">
+                  {course.thumbnailUrl ? (
+                    <Image
+                      src={course.thumbnailUrl}
+                      alt={course.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-indigo-50 flex items-center justify-center">
+                      <span className="text-6xl grayscale opacity-20">📚</span>
+                    </div>
+                  )}
+                </Link>
+
+                {/* Badges on Image */}
+                <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+                  <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-white shadow-lg ${course.category === 'grammar' ? 'bg-indigo-600' :
+                      course.category === 'speaking' ? 'bg-emerald-600' :
+                        course.category === 'writing' ? 'bg-rose-600' : 'bg-slate-800'
+                    }`}>
+                    {course.category}
+                  </div>
                 </div>
+
                 {!course.isPublished && (
-                  <div className="absolute top-4 right-4 badge-amber shadow-sm">Draft</div>
+                  <div className="absolute top-4 right-4 z-20 px-3 py-1 bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest rounded-lg shadow-lg">
+                    Draft
+                  </div>
                 )}
-              </Link>
 
-              <div className="p-6 flex flex-col flex-1 gap-4">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={levelColors[course.level] ?? 'badge-slate'}>{course.level}</span>
-                  <span className="badge-slate capitalize">{course.category}</span>
+                <div className="absolute bottom-4 left-4 z-20">
+                  <div className="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-[10px] font-black text-white uppercase tracking-widest">
+                    {course.level}
+                  </div>
                 </div>
+              </div>
 
-                <div>
+              {/* Content */}
+              <div className="p-6 flex flex-col flex-1">
+                <div className="flex-1">
                   <Link href={isManagement ? `/teacher/courses/${course._id}` : `/student/courses/${course._id}`}>
-                    <h3 className="font-display font-bold text-slate-900 leading-snug line-clamp-1 group-hover:text-primary-600 transition-colors">
+                    <h3 className="font-display text-xl font-black text-slate-800 leading-tight line-clamp-2 group-hover:text-primary-600 transition-colors">
                       {course.title}
                     </h3>
                   </Link>
-                  <p className="text-xs text-slate-500 line-clamp-2 mt-2 leading-relaxed">{course.description}</p>
+                  <p className="mt-2 text-sm text-slate-500 line-clamp-2 leading-relaxed font-medium">
+                    {course.description}
+                  </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  <span>👩‍🏫 {course.teacher?.name}</span>
-                  {isManagement && <span>👥 {course.enrollmentCount}</span>}
+                <div className="mt-6 pt-6 border-t border-slate-50 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs">
+                      {course.teacher?.name?.[0] || 'T'}
+                    </div>
+                    <span className="text-xs font-bold text-slate-600 truncate max-w-[100px]">
+                      {course.teacher?.name}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <span className="text-[10px] font-black uppercase tracking-wider">
+                      {course.lessons?.length || 0} Lessons
+                    </span>
+                  </div>
                 </div>
 
-                {isManagement && (
-                  <div className="flex items-center gap-2 pt-2">
+                {isManagement ? (
+                  <div className="mt-4 flex gap-2">
                     <Link
-                      href={`/teacher/courses/${course._id}/edit`}
-                      className="flex-1 btn-secondary !py-2 text-[10px] text-center"
+                      href={`/teacher/courses/${course._id}`}
+                      className="flex-1 px-4 py-2.5 bg-slate-900 hover:bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl text-center transition-all shadow-md hover:shadow-lg"
                     >
-                      Edit
+                      Manage
                     </Link>
                     <DeleteCourseButton courseId={course._id} />
                   </div>
+                ) : (
+                  <Link
+                    href={`/student/courses/${course._id}`}
+                    className="mt-4 w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl text-center transition-all shadow-[0_10px_20px_rgba(79,70,229,0.2)] hover:shadow-[0_15px_30px_rgba(79,70,229,0.3)]"
+                  >
+                    View Course
+                  </Link>
                 )}
               </div>
             </div>

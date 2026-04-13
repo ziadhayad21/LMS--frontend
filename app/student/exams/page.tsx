@@ -18,12 +18,7 @@ async function fetchExamsAndUser(token: string) {
     ]);
 
     const user = userRes.data?.user ?? null;
-    const rawExams = examsRes.data?.exams ?? [];
-
-    // FRONTEND GUARD: Filter out any exam not exactly matching the student's level
-    const exams = user?.level
-      ? rawExams.filter((e: any) => e.level === user.level)
-      : rawExams;
+    const exams = examsRes.data?.exams ?? [];
 
     return { exams, user };
   } catch {

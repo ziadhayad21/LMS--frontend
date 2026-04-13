@@ -160,9 +160,14 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
                       Passing: {exam.passingScore}%{exam.timeLimit ? ` · ${exam.timeLimit} min` : ''}
                     </p>
                   </div>
-                  <Link href={`/teacher/courses/${course._id}/exams/${exam._id}/results`} className="btn-secondary text-xs px-3 py-1.5">
-                    Results
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link href={`/teacher/courses/${course._id}/exams/${exam._id}/results`} className="btn-secondary text-xs px-3 py-1.5">
+                      Results
+                    </Link>
+                    <Link href={`/teacher/courses/${course._id}/exams/${exam._id}`} className="btn-secondary text-xs px-3 py-1.5">
+                      Manage
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
