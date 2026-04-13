@@ -25,20 +25,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = await fetchCourse(params.courseId);
   if (!course) return { title: 'Course Not Found' };
   return {
-    title:       course.title,
+    title: course.title,
     description: course.description.slice(0, 160),
   };
 }
 
 export default async function CourseDetailPage({ params }: Props) {
-  const token  = cookies().get('jwt')?.value;
+  const token = cookies().get('jwt')?.value;
   const course = await fetchCourse(params.courseId, token);
   if (!course) notFound();
 
   const levelColors: Record<string, string> = {
-    beginner:     'badge-green',
+    beginner: 'badge-green',
     intermediate: 'badge-amber',
-    advanced:     'badge-red',
+    advanced: 'badge-red',
   };
 
   return (
@@ -58,18 +58,16 @@ export default async function CourseDetailPage({ params }: Props) {
               <p className="mt-3 text-primary-100 leading-relaxed text-sm">{course.description}</p>
               <div className="flex items-center gap-4 mt-4 text-sm text-primary-200">
                 <span>👩‍🏫 {course.teacher?.name}</span>
-                <span>👥 {course.enrollmentCount} students</span>
                 <span>🎬 {course.lessons?.length ?? 0} lessons</span>
               </div>
             </div>
           </div>
         </div>
-        <div className="p-6 flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-6 text-sm text-slate-500">
+        <div className="p-6 flex items-center justify-between flex-wrap gap-4 border-t border-slate-200">
+          <div className="flex items-center gap-6 text-sm text-slate-600 font-medium">
             <span>📄 {course.materials?.length ?? 0} materials</span>
             <span>📝 {course.exams?.length ?? 0} exams</span>
           </div>
-          <EnrollButton courseId={course._id} />
         </div>
       </div>
 
@@ -82,18 +80,18 @@ export default async function CourseDetailPage({ params }: Props) {
 
         {course.lessons?.length === 0 ? (
           <div className="p-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-             <p className="text-3xl mb-3">📭</p>
-             <p className="text-slate-500 text-sm font-medium">Curriculum is being prepared by the instructor.</p>
+            <p className="text-3xl mb-3">📭</p>
+            <p className="text-slate-500 text-sm font-medium">Curriculum is being prepared by the instructor.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {course.lessons?.map((lesson: any) => (
-              <LessonCard 
+              <LessonCard
                 key={lesson._id}
                 lesson={{
                   ...lesson,
                   courseId: course._id
-                }} 
+                }}
               />
             ))}
           </div>

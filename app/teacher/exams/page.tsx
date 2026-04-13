@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 
 import api from '@/src/api/axios';
 
+import { getServerAuthUser } from '@/lib/server/auth';
+
 async function fetchExams(token: string) {
   try {
     const res: any = await api.get('/exams', {
@@ -27,6 +29,7 @@ export default async function TeacherExamsPage() {
   const token = cookies().get('jwt')?.value;
   if (!token) redirect('/login');
 
+  const user = await getServerAuthUser();
   const exams = await fetchExams(token);
 
   return (
@@ -42,7 +45,7 @@ export default async function TeacherExamsPage() {
         </Link>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden">
+      <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-soft overflow-hidden">
         {exams.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
@@ -57,7 +60,7 @@ export default async function TeacherExamsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
+                <tr className="bg-slate-50/50 border-b border-slate-200">
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Exam Title</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Course</th>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Details</th>
@@ -78,9 +81,9 @@ export default async function TeacherExamsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500 space-y-1">
-                       <div className="flex items-center gap-2"><Clock className="w-3 h-3"/> {exam.timeLimit || 'No limit'} mins</div>
-                       <div className="flex items-center gap-2"><Trophy className="w-3 h-3"/> Pass {exam.passingScore}%</div>
-                       <div className="flex items-center gap-2"><AlertCircle className="w-3 h-3"/> Max {exam.maxAttempts === -1 ? 'Unlimited' : exam.maxAttempts} Tries</div>
+                      <div className="flex items-center gap-2"><Clock className="w-3 h-3" /> {exam.timeLimit || 'No limit'} mins</div>
+                      <div className="flex items-center gap-2"><Trophy className="w-3 h-3" /> Pass {exam.passingScore}%</div>
+                      <div className="flex items-center gap-2"><AlertCircle className="w-3 h-3" /> Max {exam.maxAttempts === -1 ? 'Unlimited' : exam.maxAttempts} Tries</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {exam.isPublished ? (
@@ -94,8 +97,9 @@ export default async function TeacherExamsPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                       {/* Add edit/delete buttons later if needed, for MVP they can just see them */}
-                       <span className="text-xs font-bold text-slate-400">View Details</span>
+                      {user?.role === 'admin' && (
+                        <span className="text-xs font-bold text-slate-400">View Details</span>
+                      )}
                     </td>
                   </tr>
                 ))}

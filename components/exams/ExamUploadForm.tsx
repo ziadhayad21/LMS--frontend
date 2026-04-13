@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { 
-  Trophy, 
-  Trash2, 
-  PlusCircle, 
-  FileText, 
-  Clock, 
-  CheckCircle, 
+import {
+  Trophy,
+  Trash2,
+  PlusCircle,
+  FileText,
+  Clock,
+  CheckCircle,
   Plus,
   AlertCircle,
   HelpCircle,
@@ -35,7 +35,7 @@ interface QuestionForm {
   points: number;
 }
 
-export default function ExamUploadForm({}: ExamUploadFormProps) {
+export default function ExamUploadForm({ }: ExamUploadFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,11 +65,11 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
 
   const handleQuestionChange = (index: number, field: keyof QuestionForm, value: any) => {
     const updated = [...questions];
-    
+
     if (field === 'imageFile') {
       const file = value as File | null;
-      updated[index] = { 
-        ...updated[index], 
+      updated[index] = {
+        ...updated[index],
         imageFile: file,
         previewUrl: file ? URL.createObjectURL(file) : null
       };
@@ -106,7 +106,7 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
     e.preventDefault();
     if (!selectedLevel) return setError('Please select a level');
     if (questions.some(q => !q.questionText || (q.type === 'multiple-choice' && q.options.some(o => !o)))) {
-      return setError('Please fill in all questions and options');
+      return setError('Please fill in all questions and multiple-choice options');
     }
 
     setIsSubmitting(true);
@@ -154,13 +154,13 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
       <section className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-soft relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600 transition-all group-hover:w-3" />
         <div className="flex items-center gap-4 mb-8">
-           <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 border border-indigo-100">
-             <Trophy className="w-6 h-6" />
-           </div>
-           <div>
-             <h2 className="text-xl font-black text-slate-800 tracking-tight">Basic Information</h2>
-             <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Setup your assessment details</p>
-           </div>
+          <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 border border-indigo-100">
+            <Trophy className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-xl font-black text-slate-800 tracking-tight">Basic Information</h2>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Setup your assessment details</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
@@ -210,44 +210,44 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
           </div>
 
           <div>
-             <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
-               <Clock className="w-3 h-3" /> Time Limit (mins)
-             </label>
-             <input
-               type="number"
-               min="1"
-               value={examData.timeLimit}
-               onChange={(e) => setExamData({ ...examData, timeLimit: parseInt(e.target.value) })}
-               className="input-field py-4"
-             />
+            <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
+              <Clock className="w-3 h-3" /> Time Limit (mins)
+            </label>
+            <input
+              type="number"
+              min="1"
+              value={examData.timeLimit}
+              onChange={(e) => setExamData({ ...examData, timeLimit: parseInt(e.target.value) })}
+              className="input-field py-4"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-             <div>
-               <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
-                 <CheckCircle className="w-3 h-3 text-emerald-500" /> Pass %
-               </label>
-               <input
-                 type="number"
-                 min="0"
-                 max="100"
-                 value={examData.passingScore}
-                 onChange={(e) => setExamData({ ...examData, passingScore: parseInt(e.target.value) })}
-                 className="input-field py-4"
-               />
-             </div>
-             <div>
-               <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
-                 <AlertCircle className="w-3 h-3 text-amber-500" /> Max Tries
-               </label>
-               <input
-                 type="number"
-                 min="-1"
-                 value={examData.maxAttempts}
-                 onChange={(e) => setExamData({ ...examData, maxAttempts: parseInt(e.target.value) })}
-                 className="input-field py-4"
-               />
-             </div>
+            <div>
+              <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
+                <CheckCircle className="w-3 h-3 text-emerald-500" /> Pass %
+              </label>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                value={examData.passingScore}
+                onChange={(e) => setExamData({ ...examData, passingScore: parseInt(e.target.value) })}
+                className="input-field py-4"
+              />
+            </div>
+            <div>
+              <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
+                <AlertCircle className="w-3 h-3 text-amber-500" /> Max Tries
+              </label>
+              <input
+                type="number"
+                min="-1"
+                value={examData.maxAttempts}
+                onChange={(e) => setExamData({ ...examData, maxAttempts: parseInt(e.target.value) })}
+                className="input-field py-4"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -255,33 +255,33 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
       {/* 2. Questions Section */}
       <section className="space-y-8">
         <div className="flex items-center justify-between px-6">
-           <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-600 border border-slate-200">
-                <Hash className="w-5 h-5" />
-              </div>
-              <h2 className="text-xl font-black text-slate-800 tracking-tight">Assessment Questions</h2>
-           </div>
-           <button
-             type="button"
-             onClick={handleAddQuestion}
-             className="btn-indigo-soft px-8 py-3 flex items-center gap-2 text-xs font-black uppercase tracking-widest"
-           >
-             <Plus className="w-4 h-4" /> Add Question
-           </button>
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-600 border border-slate-200">
+              <Hash className="w-5 h-5" />
+            </div>
+            <h2 className="text-xl font-black text-slate-800 tracking-tight">Assessment Questions</h2>
+          </div>
+          <button
+            type="button"
+            onClick={handleAddQuestion}
+            className="btn-indigo-soft px-8 py-3 flex items-center gap-2 text-xs font-black uppercase tracking-widest"
+          >
+            <Plus className="w-4 h-4" /> Add Question
+          </button>
         </div>
 
         <div className="space-y-6">
           {questions.map((question, qIndex) => (
-            <div 
-              key={qIndex} 
+            <div
+              key={qIndex}
               className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft hover:border-indigo-100 transition-all group/q"
             >
               <div className="flex items-start justify-between mb-8">
                 <div className="flex items-center gap-3">
-                   <span className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 flex items-center justify-center text-[10px] font-black">
-                     {qIndex + 1}
-                   </span>
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Question Details</p>
+                  <span className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 flex items-center justify-center text-[10px] font-black">
+                    {qIndex + 1}
+                  </span>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Question Details</p>
                 </div>
                 <button
                   type="button"
@@ -297,21 +297,21 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
                   <div className="w-1/2">
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Question Type</label>
                     <select
-                       value={question.type}
-                       onChange={(e) => handleQuestionChange(qIndex, 'type', e.target.value)}
-                       className="input-field py-2 text-sm bg-slate-50/50"
+                      value={question.type}
+                      onChange={(e) => handleQuestionChange(qIndex, 'type', e.target.value)}
+                      className="input-field py-2 text-sm bg-slate-50/50"
                     >
-                       <option value="multiple-choice">Multiple Choice</option>
-                       <option value="essay">Essay Response</option>
+                      <option value="multiple-choice">Multiple Choice</option>
+                      <option value="essay">Essay Response</option>
                     </select>
                   </div>
                   <div className="w-1/2">
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Question Photo (Optional)</label>
                     <input
-                       type="file"
-                       accept="image/*"
-                       onChange={(e) => handleQuestionChange(qIndex, 'imageFile', e.target.files?.[0] || null)}
-                       className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 transition-all cursor-pointer"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleQuestionChange(qIndex, 'imageFile', e.target.files?.[0] || null)}
+                      className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 transition-all cursor-pointer"
                     />
                   </div>
                 </div>
@@ -319,14 +319,14 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
                 <div>
                   {question.previewUrl && (
                     <div className="mb-4 rounded-xl overflow-hidden max-h-[200px] inline-block border border-slate-100 shadow-sm relative group">
-                       <Image 
-                         src={question.previewUrl} 
-                         alt="Question Reference" 
-                         width={400} 
-                         height={200} 
-                         unoptimized 
-                         className="max-h-[200px] object-contain" 
-                       />
+                      <Image
+                        src={question.previewUrl}
+                        alt="Question Reference"
+                        width={400}
+                        height={200}
+                        unoptimized
+                        className="max-h-[200px] object-contain"
+                      />
                     </div>
                   )}
                   <textarea
@@ -341,60 +341,58 @@ export default function ExamUploadForm({}: ExamUploadFormProps) {
 
                 {question.type === 'multiple-choice' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {question.options.map((option, oIndex) => (
-                    <div key={oIndex} className="relative group/opt">
-                      <div className={`p-4 rounded-3xl border-2 transition-all flex items-center gap-4 ${
-                        question.correctOptionIndex === oIndex 
-                          ? 'border-emerald-500 bg-emerald-50/20' 
-                          : 'border-slate-50 bg-slate-50/30'
-                      }`}>
-                         <button
-                           type="button"
-                           onClick={() => handleQuestionChange(qIndex, 'correctOptionIndex', oIndex)}
-                           className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all ${
-                             question.correctOptionIndex === oIndex
-                               ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                               : 'bg-white border-slate-200 text-slate-300 hover:border-emerald-400'
-                           }`}
-                         >
-                           {question.correctOptionIndex === oIndex ? <Check className="w-4 h-4" /> : String.fromCharCode(65 + oIndex)}
-                         </button>
-                         <input
-                           type="text"
-                           required
-                           placeholder={`Option ${String.fromCharCode(65 + oIndex)}`}
-                           value={option}
-                           onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
-                           className="bg-transparent border-none focus:ring-0 p-0 w-full text-sm font-bold text-slate-700 placeholder:text-slate-300"
-                         />
-                         {question.options.length > 2 && (
-                           <button
-                             type="button"
-                             onClick={() => handleRemoveOption(qIndex, oIndex)}
-                             className="opacity-0 group-hover/opt:opacity-100 p-2 text-slate-400 hover:text-rose-500 transition-all"
-                           >
-                             <Trash2 className="w-3.5 h-3.5" />
-                           </button>
-                         )}
+                    {question.options.map((option, oIndex) => (
+                      <div key={oIndex} className="relative group/opt">
+                        <div className={`p-4 rounded-3xl border-2 transition-all flex items-center gap-4 ${question.correctOptionIndex === oIndex
+                            ? 'border-emerald-500 bg-emerald-50/20'
+                            : 'border-slate-50 bg-slate-50/30'
+                          }`}>
+                          <button
+                            type="button"
+                            onClick={() => handleQuestionChange(qIndex, 'correctOptionIndex', oIndex)}
+                            className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border transition-all ${question.correctOptionIndex === oIndex
+                                ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                : 'bg-white border-slate-200 text-slate-300 hover:border-emerald-400'
+                              }`}
+                          >
+                            {question.correctOptionIndex === oIndex ? <Check className="w-4 h-4" /> : String.fromCharCode(65 + oIndex)}
+                          </button>
+                          <input
+                            type="text"
+                            required
+                            placeholder={`Option ${String.fromCharCode(65 + oIndex)}`}
+                            value={option}
+                            onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
+                            className="bg-transparent border-none focus:ring-0 p-0 w-full text-sm font-bold text-slate-700 placeholder:text-slate-300"
+                          />
+                          {question.options.length > 2 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveOption(qIndex, oIndex)}
+                              className="opacity-0 group-hover/opt:opacity-100 p-2 text-slate-400 hover:text-rose-500 transition-all"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  {question.options.length < 6 && (
-                    <button
-                      type="button"
-                      onClick={() => handleAddOption(qIndex)}
-                      className="p-4 rounded-3xl border-2 border-dashed border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest"
-                    >
-                      <PlusCircle className="w-4 h-4" /> Add Option
-                    </button>
-                  )}
-                </div>
+                    ))}
+                    {question.options.length < 6 && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddOption(qIndex)}
+                        className="p-4 rounded-3xl border-2 border-dashed border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600 hover:bg-indigo-50/30 transition-all flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest"
+                      >
+                        <PlusCircle className="w-4 h-4" /> Add Option
+                      </button>
+                    )}
+                  </div>
                 )}
-                
+
                 {question.type === 'essay' && (
                   <div className="p-8 bg-slate-50 border border-slate-100 rounded-3xl text-center">
-                     <FileText className="w-8 h-8 text-slate-300 mx-auto mb-3" />
-                     <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Students will see a text area to write their answer.</p>
+                    <FileText className="w-8 h-8 text-slate-300 mx-auto mb-3" />
+                    <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Students will see a text area to write their answer.</p>
                   </div>
                 )}
               </div>

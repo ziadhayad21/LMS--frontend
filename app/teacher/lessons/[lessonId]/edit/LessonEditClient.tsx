@@ -8,6 +8,7 @@ interface LessonData {
   _id: string;
   title: string;
   description?: string;
+  level: string;
   order: number;
   isPreview: boolean;
   isPublished: boolean;
@@ -24,22 +25,23 @@ interface Props {
 export default function LessonEditClient({ initialData, courseId }: Props) {
   const router = useRouter();
 
-  const [title,      setTitle]      = useState(initialData.title || '');
-  const [description,setDescription]= useState(initialData.description || '');
-  const [videoUrl,   setVideoUrl]   = useState(initialData.videoUrl || '');
-  const [videoFile,  setVideoFile]  = useState<File | null>(null);
-  const [pdfFile,    setPdfFile]    = useState<File | null>(null);
-  const [order,      setOrder]      = useState(initialData.order?.toString() || '1');
-  const [isPreview,  setIsPreview]  = useState(initialData.isPreview || false);
-  const [isPublished,setIsPublished]= useState(initialData.isPublished || false);
-  
+  const [title, setTitle] = useState(initialData.title || '');
+  const [description, setDescription] = useState(initialData.description || '');
+  const [level, setLevel] = useState(initialData.level || '');
+  const [videoUrl, setVideoUrl] = useState(initialData.videoUrl || '');
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [order, setOrder] = useState(initialData.order?.toString() || '1');
+  const [isPreview, setIsPreview] = useState(initialData.isPreview || false);
+  const [isPublished, setIsPublished] = useState(initialData.isPublished || false);
+
   // If there's an existing file or no external url, default to file mode
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>(initialData.videoUrl ? 'url' : 'file');
 
-  const [saving,    setSaving]    = useState(false);
-  const [error,     setError]     = useState('');
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const pdfInputRef  = useRef<HTMLInputElement>(null);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,6 +68,7 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) { setError('Lesson title is required.'); return; }
+    if (!level) { setError('Academic year is required.'); return; }
     if (uploadMode === 'url' && !videoUrl.trim()) { setError('Please enter a video URL.'); return; }
 
     setSaving(true);
@@ -73,9 +76,10 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
 
     try {
       const payload: any = {
-        title:       title.trim(),
+        title: title.trim(),
         description: description.trim() || undefined,
-        order:       parseInt(order, 10) || 1,
+        level: level,
+        order: parseInt(order, 10) || 1,
         isPreview,
         isPublished,
       };
@@ -85,13 +89,13 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
       }
 
       await lessonApi.update(
-        courseId, 
-        initialData._id, 
-        payload, 
+        courseId,
+        initialData._id,
+        payload,
         uploadMode === 'file' ? videoFile ?? undefined : undefined,
         pdfFile ?? undefined
       );
-      
+
       router.push('/teacher/lessons');
       router.refresh();
     } catch (e: any) {
@@ -109,12 +113,39 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
         </div>
       )}
 
-      {/* Title */}
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1.5">
-          Lesson Title <span className="text-red-500">*</span>
-        </label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} className="input-field" placeholder="e.g. Introduction to Present Perfect" />
+      {/* Grid for basic info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Title */}
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            Lesson Title <span className="text-red-500">*</span>
+          </label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} className="input-field" placeholder="e.g. Introduction to Present Perfect" />
+        </div>
+
+        {/* Level */}
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5">
+            Academic Year <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="input-field"
+          >
+            <option value="">Select Year...</option>
+            {[
+              'أولى إعدادي',
+              'تانية إعدادي',
+              'تالتة إعدادي',
+              'أولى ثانوي',
+              'تانية ثانوي',
+              'تالتة ثانوي',
+            ].map(lvl => (
+              <option key={lvl} value={lvl}>{lvl}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Description */}
@@ -132,11 +163,10 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
               key={mode}
               type="button"
               onClick={() => setUploadMode(mode)}
-              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                uploadMode === mode
+              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${uploadMode === mode
                   ? 'bg-primary-600 text-white'
                   : 'bg-white text-slate-600 hover:bg-slate-50'
-              }`}
+                }`}
             >
               {mode === 'file' ? '📁 Upload File/Change' : '🔗 External URL'}
             </button>
