@@ -3,8 +3,7 @@ import { LayoutDashboard, BookOpen, PlusCircle, Trophy, Users, Award } from 'luc
 export const TEACHER_NAV_ITEMS = [
     { href: '/teacher/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/teacher/tracking', icon: Users, label: 'Student Tracking' },
-    { href: '/teacher/lessons', icon: BookOpen, label: 'All Lessons' },
-    { href: '/teacher/lessons/new', icon: PlusCircle, label: 'Add Lesson' },
+    { href: '/teacher/courses', icon: BookOpen, label: 'ALL Courses' },
     { href: '/teacher/exams', icon: Trophy, label: 'Manage Exams' },
 ];
 

@@ -31,7 +31,7 @@ export default async function TeacherCoursesPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="page-title">My Courses</h1>
+          <h1 className="page-title">ALL Courses</h1>
           <p className="text-slate-500 text-sm mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''}</p>
         </div>
         <Link href="/teacher/courses/new" className="btn-primary">+ New Course</Link>

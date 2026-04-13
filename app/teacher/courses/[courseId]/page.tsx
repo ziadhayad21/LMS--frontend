@@ -56,7 +56,7 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
       </div>
 
       {/* ── Quick Actions Grid ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* ADD LESSON — primary action */}
         <Link
           href={`/teacher/courses/${course._id}/lessons/new`}
@@ -68,20 +68,6 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
           <div className="text-center">
             <p className="font-black text-base tracking-tight">Add Lesson</p>
             <p className="text-indigo-200 text-xs mt-0.5">{course.lessons?.length ?? 0} lesson{course.lessons?.length !== 1 ? 's' : ''} so far</p>
-          </div>
-        </Link>
-
-        {/* UPLOAD MATERIAL */}
-        <Link
-          href={`/teacher/courses/${course._id}/materials/new`}
-          className="group flex flex-col items-center justify-center gap-3 p-8 bg-white hover:bg-slate-50 rounded-[2.5rem] border border-slate-200 shadow-soft transition-all active:scale-95"
-        >
-          <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-3xl border border-rose-100 group-hover:scale-110 transition-transform">
-            📄
-          </div>
-          <div className="text-center">
-            <p className="font-black text-slate-800 text-base tracking-tight">Upload PDF</p>
-            <p className="text-slate-400 text-xs mt-0.5">{course.materials?.length ?? 0} material{course.materials?.length !== 1 ? 's' : ''}</p>
           </div>
         </Link>
 
@@ -116,7 +102,7 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
           <div className="bg-white rounded-[2.5rem] p-16 text-center border border-dashed border-slate-200">
             <p className="text-4xl mb-3">🎬</p>
             <p className="text-slate-600 font-black text-lg">No lessons yet</p>
-            <p className="text-slate-400 text-sm mt-1 mb-8">Start building your curriculum by adding the first lesson.</p>
+            <p className="text-slate-400 text-sm mt-1 mb-8">All lessons (with videos & PDFs) must be added here.</p>
             <Link href={`/teacher/courses/${course._id}/lessons/new`} className="btn-primary">
               + Add First Lesson
             </Link>
@@ -138,6 +124,7 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
                       }
                       {lesson.level && <span className="badge-slate text-xs">{lesson.level}</span>}
                       {lesson.isPreview && <span className="badge-blue text-xs">Preview</span>}
+                      {lesson.pdfFile && <span className="text-[10px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded border border-red-100 font-bold uppercase tracking-tight">PDF Material</span>}
                     </div>
                   </div>
                   <Link
@@ -176,31 +163,6 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
                   <Link href={`/teacher/courses/${course._id}/exams/${exam._id}/results`} className="btn-secondary text-xs px-3 py-1.5">
                     Results
                   </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── Materials List ──────────────────────────────────────────────────────── */}
-      {course.materials?.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="section-title">Materials</h2>
-            <Link href={`/teacher/courses/${course._id}/materials/new`} className="btn-primary text-sm">
-              + Upload PDF
-            </Link>
-          </div>
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden">
-            <div className="divide-y divide-slate-100">
-              {course.materials?.map((mat: any) => (
-                <div key={mat._id} className="flex items-center gap-4 p-5 hover:bg-slate-50 transition-colors">
-                  <span className="text-xl shrink-0">📄</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-800 text-sm truncate">{mat.title}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">PDF Material</p>
-                  </div>
                 </div>
               ))}
             </div>

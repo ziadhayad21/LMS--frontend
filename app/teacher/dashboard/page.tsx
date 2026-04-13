@@ -17,9 +17,9 @@ async function fetchTeacherDashboard(token: string) {
   try {
     const [dashboardRes, lessonsRes, pendingRes, trackingRes]: any = await Promise.all([
       api.get('/courses/teacher/dashboard', { headers: { Cookie: `jwt=${token}` } }),
-      api.get('/lessons',                    { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/lessons', { headers: { Cookie: `jwt=${token}` } }),
       api.get('/auth/students?status=pending', { headers: { Cookie: `jwt=${token}` } }),
-      api.get('/progress/tracking',          { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/progress/tracking', { headers: { Cookie: `jwt=${token}` } }),
     ]);
 
     return {
@@ -35,7 +35,7 @@ async function fetchTeacherDashboard(token: string) {
 
 async function approveStudent(token: string, studentId: string) {
   try {
-    await api.patch(`/auth/students/${studentId}/status`, 
+    await api.patch(`/auth/students/${studentId}/status`,
       { status: 'active' },
       { headers: { Cookie: `jwt=${token}` } }
     );
@@ -68,8 +68,8 @@ export default async function TeacherDashboardPage({
           <h1 className="text-3xl font-black text-slate-800 tracking-tight font-display">Faculty Dashboard</h1>
           <p className="text-slate-400 mt-1 text-sm font-bold uppercase tracking-widest">Academic Administration</p>
         </div>
-        <Link href="/teacher/lessons/new" className="btn-primary">
-          <Plus className="w-5 h-5" /> Add New Lesson
+        <Link href="/teacher/courses" className="btn-primary">
+          <Book className="w-5 h-5" /> ALL Courses
         </Link>
       </div>
 
@@ -109,7 +109,7 @@ export default async function TeacherDashboardPage({
             {pendingStudents.length === 0 ? (
               <div className="bg-white rounded-[2.5rem] p-16 text-center border border-slate-100 shadow-soft">
                 <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                   <UserCheck className="w-10 h-10 text-emerald-500 opacity-20" />
+                  <UserCheck className="w-10 h-10 text-emerald-500 opacity-20" />
                 </div>
                 <p className="text-slate-600 font-black text-lg">Classroom is up to date.</p>
                 <p className="text-slate-400 text-sm mt-1">No pending student approvals at the moment.</p>
@@ -129,10 +129,10 @@ export default async function TeacherDashboardPage({
                       {pendingStudents.map((student: any) => (
                         <tr key={student._id} className="group hover:bg-slate-50/50 transition-colors">
                           <td className="px-8 py-5">
-                             <p className="font-black text-slate-800 group-hover:text-indigo-600 transition-colors">{student.name}</p>
+                            <p className="font-black text-slate-800 group-hover:text-indigo-600 transition-colors">{student.name}</p>
                           </td>
                           <td className="px-8 py-5">
-                             <p className="text-slate-500 font-medium">{student.email}</p>
+                            <p className="text-slate-500 font-medium">{student.email}</p>
                           </td>
                           <td className="px-8 py-5 text-right">
                             <Link
@@ -156,9 +156,9 @@ export default async function TeacherDashboardPage({
           <section>
             <div className="flex items-center justify-between mb-6 px-2">
               <h2 className="text-xl font-black text-slate-800 tracking-tight font-display">Recent Lessons</h2>
-              <Link href="/teacher/lessons" className="text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:text-indigo-700">Manage All</Link>
+              <Link href="/teacher/courses" className="text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:text-indigo-700">Manage All Courses</Link>
             </div>
-            
+
             {lessons.length === 0 ? (
               <div className="p-10 text-center bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-widest">No modules created.</div>
             ) : (
@@ -166,10 +166,10 @@ export default async function TeacherDashboardPage({
                 {lessons.slice(0, 6).map((lesson: any) => (
                   <div key={lesson._id} className="bg-white rounded-3xl p-5 border border-slate-100 shadow-soft hover:shadow-xl hover:border-indigo-100 transition-all duration-300 group">
                     <div className="flex items-center justify-between mb-2">
-                       <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest ${lesson.isPublished ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                         {lesson.isPublished ? 'Live' : 'Draft'}
-                       </span>
-                       <Clock className="w-3 h-3 text-slate-200" />
+                      <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest ${lesson.isPublished ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                        {lesson.isPublished ? 'Live' : 'Draft'}
+                      </span>
+                      <Clock className="w-3 h-3 text-slate-200" />
                     </div>
                     <p className="font-black text-slate-800 group-hover:text-indigo-600 transition-colors truncate">{lesson.title}</p>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
