@@ -1,16 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { Play } from 'lucide-react';
 
-const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
-
 export default function LessonPreviewPlayer({ lesson }: { lesson: any }) {
-  const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace('/api/v1', '').replace(/\/$/, '');
   const videoUrl = lesson?.videoUrl
     ? lesson.videoUrl
-    : lesson?.videoFile?.filename
-    ? `${apiBase}/uploads/videos/${lesson.videoFile.filename}`
     : null;
 
   return (
@@ -18,15 +12,11 @@ export default function LessonPreviewPlayer({ lesson }: { lesson: any }) {
       <div className="flex-1 flex flex-col justify-center bg-black relative rounded-3xl overflow-hidden shadow-2xl">
         <div className="w-full aspect-video max-h-[70vh]">
           {videoUrl ? (
-            <ReactPlayer
-              url={videoUrl}
-              width="100%"
-              height="100%"
+            <video
+              src={videoUrl}
               controls
-              playing={false}
-              config={{
-                file: { attributes: { controlsList: 'nodownload' } },
-              }}
+              playsInline
+              className="w-full h-full object-contain bg-black"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-white/20 border border-white/5 bg-slate-900 p-12 text-center">

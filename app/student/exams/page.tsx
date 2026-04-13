@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import ExamCard from '@/components/exams/ExamCard';
 import { Trophy } from 'lucide-react';
 import api from '@/src/api/axios';
+import ExamListItem from '@/components/exams/ExamListItem';
 
 export const metadata: Metadata = {
   title: 'Available Exams',
@@ -12,17 +12,27 @@ export const metadata: Metadata = {
 
 async function fetchExamsAndUser(token: string) {
   try {
-    const [examsRes, userRes]: any = await Promise.all([
+    const [examsRes, userRes, resultsRes]: any = await Promise.all([
       api.get('/exams', { headers: { Cookie: `jwt=${token}` } }),
       api.get('/auth/me', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/results/my', { headers: { Cookie: `jwt=${token}` } }),
     ]);
 
     const user = userRes.data?.user ?? null;
     const exams = examsRes.data?.exams ?? [];
+    const results = resultsRes.data?.results ?? [];
 
-    return { exams, user };
+    // attempt counts by exam id
+    const attemptCounts = results.reduce((acc: Record<string, number>, r: any) => {
+      const eid = r.exam?._id || r.exam;
+      if (!eid) return acc;
+      acc[eid] = (acc[eid] || 0) + 1;
+      return acc;
+    }, {});
+
+    return { exams, user, attemptCounts };
   } catch {
-    return { exams: [], user: null };
+    return { exams: [], user: null, attemptCounts: {} as Record<string, number> };
   }
 }
 
@@ -30,7 +40,7 @@ export default async function StudentExamsPage() {
   const token = cookies().get('jwt')?.value;
   if (!token) redirect('/login');
 
-  const { exams, user } = await fetchExamsAndUser(token);
+  const { exams, user, attemptCounts } = await fetchExamsAndUser(token);
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -57,12 +67,13 @@ export default async function StudentExamsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-3">
           {exams.map((exam: any) => (
-            <ExamCard
+            <ExamListItem
               key={exam._id}
               courseId={exam.course?._id || exam.course}
               exam={exam}
+              attemptCount={attemptCounts?.[exam._id] || 0}
             />
           ))}
         </div>

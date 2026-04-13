@@ -3,7 +3,7 @@
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Bell, Menu, X, LayoutGrid } from 'lucide-react';
+import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Menu, X, LayoutGrid } from 'lucide-react';
 import { TEACHER_NAV_ITEMS, STUDENT_NAV_ITEMS } from '@/lib/constants/navigation';
 import clsx from 'clsx';
 
@@ -84,11 +84,6 @@ export default function Navbar() {
               </>
             )}
           </div>
-
-          <button className="relative w-10 h-10 rounded-xl hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors group">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white ring-2 ring-indigo-500/20 animate-pulse" />
-          </button>
 
           <div className="relative">
             <button

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/contexts/AuthContext';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -67,7 +68,12 @@ export default function LoginForm() {
           <label htmlFor="password" className="block text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
             Secure Password
           </label>
-          <a href="#" className="text-[10px] font-black text-brand-500 uppercase tracking-widest hover:underline decoration-brand-200 decoration-2">Forgot Key?</a>
+          <Link
+            href="/forgot-password"
+            className="text-[10px] font-black text-brand-500 uppercase tracking-widest hover:underline decoration-brand-200 decoration-2"
+          >
+            Forgot Key?
+          </Link>
         </div>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">

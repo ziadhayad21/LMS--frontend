@@ -31,8 +31,11 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
     ? `/teacher/lessons/${lesson._id}/preview?courseId=${cid || ''}`
     : `/student/courses/${cid || 'general'}/lessons/${lesson._id}/video`;
 
-  // Use relative paths to leverage next.config.js rewrites
-  const pdfUrl = lesson.pdfFile?.filename ? `/uploads/lessons/${lesson.pdfFile.filename}` : null;
+  // Use the authenticated PDF endpoint so access rules apply (student level / teacher ownership)
+  const pdfUrl =
+    lesson.pdfFile?.filename && cid
+      ? `/api/v1/courses/${cid}/lessons/${lesson._id}/pdf`
+      : null;
 
   return (
     <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-soft hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 overflow-hidden group">
@@ -79,7 +82,7 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
 
           {pdfUrl && (
             <a
-              href={pdfUrl}
+              href={`/pdf-viewer?url=${encodeURIComponent(pdfUrl)}&title=${encodeURIComponent(lesson.pdfFile?.originalName || 'Lesson PDF')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-14 h-14 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100 rounded-2xl flex items-center justify-center transition-all group/pdf shadow-sm shadow-rose-100 hover:shadow-xl hover:shadow-rose-500/10 active:scale-95"

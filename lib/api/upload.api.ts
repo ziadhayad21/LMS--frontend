@@ -16,4 +16,17 @@ export const uploadApi = {
 
     return res.data;
   },
+
+  uploadVideo: async (file: File): Promise<{ url: string }> => {
+    const formData = new FormData();
+    formData.append('video', file);
+
+    const res = await apiClient.post<ApiSuccess<{ url: string }>>('/upload/video', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return res.data;
+  },
 };

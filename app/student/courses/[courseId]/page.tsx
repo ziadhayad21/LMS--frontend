@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import EnrollButton from '@/components/course/EnrollButton';
 import LessonCard from '@/components/lessons/LessonCard';
+import ExamListItem from '@/components/exams/ExamListItem';
 import api from '@/src/api/axios';
 
 interface Props { params: { courseId: string } }
@@ -129,24 +130,12 @@ export default async function CourseDetailPage({ params }: Props) {
           <h2 className="section-title mb-4">Exams &amp; Quizzes</h2>
           <div className="space-y-3">
             {course.exams?.map((exam: any) => (
-              <Link
+              <ExamListItem
                 key={exam._id}
+                courseId={course._id}
+                exam={exam}
                 href={`/student/courses/${course._id}/exams/${exam._id}`}
-                className="card p-4 flex items-center gap-4 hover:border-primary-200 transition-colors group"
-              >
-                <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center shrink-0">
-                  <span className="text-lg">📝</span>
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-slate-800 text-sm">{exam.title}</p>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
-                    <span>Passing: {exam.passingScore}%</span>
-                    {exam.timeLimit && <span>⏱ {exam.timeLimit} min</span>}
-                    <span>Max {exam.maxAttempts} attempt{exam.maxAttempts !== 1 ? 's' : ''}</span>
-                  </div>
-                </div>
-                <span className="btn-primary text-xs px-3 py-1.5">Take Exam</span>
-              </Link>
+              />
             ))}
           </div>
         </section>

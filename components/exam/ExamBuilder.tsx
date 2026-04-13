@@ -41,7 +41,7 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
   const [description, setDescription] = useState(initialData?.description ?? '');
   const [timeLimit, setTimeLimit] = useState(initialData?.timeLimit?.toString() ?? '');
   const [passingScore, setPassingScore] = useState(initialData?.passingScore?.toString() ?? '60');
-  const [maxAttempts, setMaxAttempts] = useState(initialData?.maxAttempts?.toString() ?? '3');
+  const [maxAttempts, setMaxAttempts] = useState(initialData?.maxAttempts?.toString() ?? '1');
   const [shuffle, setShuffle] = useState(initialData?.shuffleQuestions ?? false);
 
   // Questions state

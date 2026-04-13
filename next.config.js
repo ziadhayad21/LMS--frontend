@@ -14,12 +14,27 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Default app pages: do not allow embedding
         source: '/(.*)',
         headers: [
           { key: 'X-Frame-Options',           value: 'DENY' },
           { key: 'X-Content-Type-Options',    value: 'nosniff' },
           { key: 'Referrer-Policy',           value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy',        value: 'camera=(), microphone=(), geolocation=()' },
+        ],
+      },
+      {
+        // Allow same-origin embedding for proxied files/APIs (needed for inline PDF viewer)
+        source: '/uploads/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ],
+      },
+      {
+        // Allow same-origin embedding for proxied API responses (e.g. /api/v1/.../pdf)
+        source: '/api/:path*',
+        headers: [
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
         ],
       },
     ];

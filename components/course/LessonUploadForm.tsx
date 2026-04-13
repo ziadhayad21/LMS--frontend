@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { lessonApi } from '@/lib/api/lessons.api';
+import { uploadApi } from '@/lib/api/upload.api';
 
 interface Props {
   courseId: string;
@@ -76,6 +77,14 @@ export default function LessonUploadForm({ courseId, initialData }: Props) {
     setError('');
 
     try {
+      let finalVideoUrl = uploadMode === 'url' ? videoUrl.trim() : '';
+
+      // Cloudinary upload (no local storage)
+      if (uploadMode === 'file' && videoFile) {
+        const uploaded = await uploadApi.uploadVideo(videoFile);
+        finalVideoUrl = uploaded.url;
+      }
+
       const payload = {
         title: title.trim(),
         description: description.trim() || undefined,
@@ -83,7 +92,7 @@ export default function LessonUploadForm({ courseId, initialData }: Props) {
         order: parseInt(order, 10) || 1,
         isPreview,
         isPublished,
-        videoUrl: uploadMode === 'url' ? videoUrl.trim() : undefined,
+        videoUrl: finalVideoUrl || undefined,
       };
 
       if (!courseId) {
@@ -97,14 +106,12 @@ export default function LessonUploadForm({ courseId, initialData }: Props) {
           courseId,
           initialData._id,
           payload,
-          uploadMode === 'file' ? videoFile ?? undefined : undefined,
           pdfFile ?? undefined
         );
       } else {
         await lessonApi.create(
           courseId,
           payload,
-          uploadMode === 'file' ? videoFile ?? undefined : undefined,
           pdfFile ?? undefined
         );
       }

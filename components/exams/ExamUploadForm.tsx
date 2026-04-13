@@ -47,7 +47,7 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
     description: '',
     timeLimit: 30,
     passingScore: 60,
-    maxAttempts: 3,
+    maxAttempts: 1,
   });
 
   const [questions, setQuestions] = useState<QuestionForm[]>([

@@ -2,12 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { lessonApi } from '@/lib/api/lessons.api';
 import Link from 'next/link';
 import { ChevronLeft, Play, Clock, CheckCircle } from 'lucide-react';
-
-const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 export default function VideoLessonPage() {
   const params = useParams();
@@ -42,9 +39,7 @@ export default function VideoLessonPage() {
 
   const videoUrl = lesson?.videoUrl
     ? lesson.videoUrl
-    : lesson?.videoFile?.filename
-      ? `/uploads/videos/${lesson.videoFile.filename}`
-      : null;
+    : null;
 
   if (loading) return <div className="p-20 text-center text-slate-400">Loading academic theater...</div>;
   if (error) return <div className="p-20 text-center text-rose-500 font-bold">{error}</div>;
@@ -79,16 +74,18 @@ export default function VideoLessonPage() {
       <div className="flex-1 flex flex-col justify-center bg-black relative">
         <div className="container mx-auto px-0 aspect-video max-h-[80vh]">
           {videoUrl ? (
-            <ReactPlayer
-              url={videoUrl}
-              width="100%"
-              height="100%"
+            <video
+              src={videoUrl}
               controls
-              onProgress={handleProgress}
-              playing={true}
-              config={{
-                file: { attributes: { controlsList: 'nodownload', crossOrigin: 'anonymous' } },
+              autoPlay
+              playsInline
+              onTimeUpdate={(e) => {
+                const el = e.currentTarget;
+                if (!el.duration) return;
+                const p = el.currentTime / el.duration;
+                handleProgress({ played: Number.isFinite(p) ? p : 0 });
               }}
+              className="w-full h-full object-contain bg-black"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-white/20 border border-white/5 bg-slate-900 rounded-3xl p-12 text-center">

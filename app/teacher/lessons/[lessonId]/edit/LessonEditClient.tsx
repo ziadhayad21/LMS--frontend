@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { lessonApi } from '@/lib/api/lessons.api';
+import { uploadApi } from '@/lib/api/upload.api';
 
 interface LessonData {
   _id: string;
@@ -86,13 +87,15 @@ export default function LessonEditClient({ initialData, courseId }: Props) {
 
       if (uploadMode === 'url') {
         payload.videoUrl = videoUrl.trim();
+      } else if (uploadMode === 'file' && videoFile) {
+        const uploaded = await uploadApi.uploadVideo(videoFile);
+        payload.videoUrl = uploaded.url;
       }
 
       await lessonApi.update(
         courseId,
         initialData._id,
         payload,
-        uploadMode === 'file' ? videoFile ?? undefined : undefined,
         pdfFile ?? undefined
       );
 

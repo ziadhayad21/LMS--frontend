@@ -2,11 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { lessonApi } from '@/lib/api/lessons.api';
 import Link from 'next/link';
-
-const ReactPlayer = dynamic(() => import('react-player/lazy'), { ssr: false });
 
 // ── Segment tracker: records actual watch ranges, ignoring skips ───────────────
 class SegmentTracker {
@@ -161,12 +158,10 @@ export default function LessonPage() {
 
   const videoUrl = lesson?.videoUrl
     ? lesson.videoUrl
-    : lesson?.videoFile?.filename
-      ? `/uploads/videos/${lesson.videoFile.filename}`
-      : null;
+    : null;
 
   const pdfUrl = lesson?.pdfFile?.filename
-    ? `/uploads/lessons/${lesson.pdfFile.filename}`
+    ? `/api/v1/courses/${params.courseId as string}/lessons/${params.lessonId as string}/pdf`
     : null;
 
   if (loading) return (
@@ -195,20 +190,20 @@ export default function LessonPage() {
       <div className="bg-white rounded-[2rem] overflow-hidden border border-slate-100 shadow-soft">
         <div className="aspect-video bg-slate-900 relative">
           {videoUrl ? (
-            <ReactPlayer
-              url={videoUrl}
-              width="100%"
-              height="100%"
+            <video
+              src={videoUrl}
               controls
-              playing={playing}
+              playsInline
               onPlay={handlePlay}
-              onProgress={handleProgress}
-              onDuration={handleDuration}
               onPause={handlePause}
               onEnded={handleEnded}
-              config={{
-                file: { attributes: { controlsList: 'nodownload', crossOrigin: 'anonymous' } },
+              onLoadedMetadata={(e) => handleDuration(e.currentTarget.duration || 0)}
+              onTimeUpdate={(e) => {
+                const el = e.currentTarget;
+                if (!el.duration) return;
+                handleProgress({ played: el.currentTime / el.duration, playedSeconds: el.currentTime });
               }}
+              className="w-full h-full object-contain bg-black"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-white/50">
@@ -257,7 +252,7 @@ export default function LessonPage() {
                 </div>
               </div>
               <a
-                href={pdfUrl}
+                href={`/pdf-viewer?url=${encodeURIComponent(pdfUrl)}&title=${encodeURIComponent(lesson.pdfFile?.originalName || 'Lesson PDF')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-slate-900 hover:bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg"
