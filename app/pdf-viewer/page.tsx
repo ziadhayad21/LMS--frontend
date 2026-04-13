@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import PdfViewerClient from './PdfViewerClient';
 
+export const dynamic = 'force-dynamic';
+
 export default function PdfViewerPage() {
   return (
     <Suspense
