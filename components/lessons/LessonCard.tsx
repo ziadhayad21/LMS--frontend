@@ -20,97 +20,75 @@ interface LessonCardProps {
 
 
 export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps) {
-  const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace('/api/v1', '').replace(/\/$/, '');
-  const pdfUrl = lesson.pdfFile?.filename ? `${apiBase}/uploads/lessons/${lesson.pdfFile.filename}` : null;
-
-  // Extract courseId safely (handle if it's an object or string)
+  // Extract courseId safely
   const cid = (typeof lesson.courseId === 'object' && lesson.courseId !== null)
-    ? (lesson.courseId as any)._id 
+    ? (lesson.courseId as any)._id
     : lesson.courseId;
 
-  // Dedicated navigation path based on user role/mode
+  // IMPORTANT: The theater page is at /video, the info page is at /
+  // We point to the theater page for the "Watch Video" button.
   const videoPath = mode === 'teacher'
     ? `/teacher/lessons/${lesson._id}/preview?courseId=${cid || ''}`
     : `/student/courses/${cid || 'general'}/lessons/${lesson._id}/video`;
 
-
-
+  // Use relative paths to leverage next.config.js rewrites
+  const pdfUrl = lesson.pdfFile?.filename ? `/uploads/lessons/${lesson.pdfFile.filename}` : null;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 overflow-hidden group">
-      {/* Header Info */}
-      <div className="p-6 border-b border-slate-50 bg-gradient-to-r from-white to-slate-50/30">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="px-2 py-0.5 bg-primary-50 text-primary-600 text-[10px] font-bold uppercase tracking-wider rounded-md border border-primary-100">
-            Education Module
-          </span>
-          {lesson.level && (
-            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded-md border border-indigo-100">
-              {lesson.level}
-            </span>
-          )}
-
-          {lesson.createdAt && (
-            <span className="text-[10px] text-slate-400 font-medium">
-              • {new Date(lesson.createdAt).toLocaleDateString()}
-            </span>
-          )}
+    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-soft hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 overflow-hidden group">
+      {/* Visual Header */}
+      <div className="relative aspect-[21/9] bg-slate-900 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 group-hover:bg-primary-500 group-hover:border-primary-400 transition-all duration-500 z-20">
+            <Play className="w-6 h-6 text-white ml-1" />
+          </div>
         </div>
-        <h3 className="text-xl font-bold text-slate-800 leading-tight mb-2 group-hover:text-primary-600 transition-colors">
+        {/* Abstract background shape */}
+        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-primary-500/10 rounded-full blur-2xl" />
+      </div>
+
+      {/* Content */}
+      <div className="p-8">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-black uppercase tracking-widest rounded-full border border-indigo-100">
+            {lesson.level || 'Academic'}
+          </span>
+          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            {lesson.createdAt ? new Date(lesson.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Curriculum'}
+          </span>
+        </div>
+
+        <h3 className="text-xl font-black text-slate-800 leading-tight mb-3 group-hover:text-primary-600 transition-colors tracking-tight font-display">
           {lesson.title}
         </h3>
+
         {lesson.description && (
-          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed mb-8">
             {lesson.description}
           </p>
         )}
-      </div>
 
-      {/* CLICKABLE SECTIONS */}
-      <div className="grid grid-cols-2 divide-x divide-slate-100 h-40">
-        
-        {/* WATCH VIDEO SECTION */}
-        <Link 
-          href={videoPath}
-          className="flex flex-col items-center justify-center p-6 bg-white hover:bg-primary-50 transition-all group/video relative overflow-hidden"
-        >
-          <div className="w-14 h-14 bg-primary-100 text-primary-600 rounded-2xl flex items-center justify-center mb-3 transform group-hover/video:scale-110 group-hover/video:rotate-3 transition-all duration-500">
-            <Video className="w-7 h-7" />
-          </div>
-          <span className="text-sm font-bold text-slate-700">Watch Video</span>
-          <span className="text-[10px] font-medium text-slate-400 mt-1 flex items-center gap-1">
-            Open Player <ChevronRight className="w-3 h-3" />
-          </span>
-          <div className="absolute top-0 right-0 p-1 opacity-0 group-hover/video:opacity-100 transition-opacity">
-             <div className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-ping" />
-          </div>
-        </Link>
-
-        {/* VIEW PDF SECTION */}
-        {pdfUrl ? (
-          <a 
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center p-6 bg-white hover:bg-red-50 transition-all group/pdf relative overflow-hidden"
+        <div className="flex items-center gap-3">
+          <Link
+            href={videoPath}
+            className="flex-1 bg-slate-900 hover:bg-black text-white text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
           >
-            <div className="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-3 transform group-hover/pdf:scale-110 group-hover/pdf:-rotate-3 transition-all duration-500">
-              <FileText className="w-7 h-7" />
-            </div>
-            <span className="text-sm font-bold text-slate-700">View PDF</span>
-            <span className="text-[10px] font-medium text-slate-400 mt-1 flex items-center gap-1">
-              Download File <Download className="w-3 h-3" />
-            </span>
-          </a>
-        ) : (
-          <div className="flex flex-col items-center justify-center p-6 bg-slate-50/50 cursor-not-allowed opacity-60">
-            <div className="w-14 h-14 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mb-3">
-              <BookOpen className="w-7 h-7" />
-            </div>
-            <span className="text-sm font-bold text-slate-400 uppercase tracking-tighter">No Materials</span>
-            <span className="text-[10px] font-medium text-slate-300 mt-1 italic">Text only lesson</span>
-          </div>
-        )}
+            <Video className="w-4 h-4" /> Watch Lesson
+          </Link>
+
+          {pdfUrl && (
+            <a
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100 rounded-2xl flex items-center justify-center transition-all group/pdf shadow-sm shadow-rose-100 hover:shadow-xl hover:shadow-rose-500/10 active:scale-95"
+              title="Download Materials (PDF)"
+            >
+              <FileText className="w-6 h-6" />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

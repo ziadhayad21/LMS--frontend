@@ -3,22 +3,31 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import ExamCard from '@/components/exams/ExamCard';
 import { Trophy } from 'lucide-react';
+import api from '@/src/api/axios';
 
 export const metadata: Metadata = {
   title: 'Available Exams',
   description: 'View and take exams for your enrolled courses.',
 };
 
-import api from '@/src/api/axios';
-
-async function fetchStudentExams(token: string) {
+async function fetchExamsAndUser(token: string) {
   try {
-    const res: any = await api.get('/exams', {
-      headers: { Cookie: `jwt=${token}` },
-    });
-    return res.data?.exams || [];
-  } catch (error) {
-    return [];
+    const [examsRes, userRes]: any = await Promise.all([
+      api.get('/exams', { headers: { Cookie: `jwt=${token}` } }),
+      api.get('/auth/me', { headers: { Cookie: `jwt=${token}` } }),
+    ]);
+
+    const user = userRes.data?.user ?? null;
+    const rawExams = examsRes.data?.exams ?? [];
+
+    // FRONTEND GUARD: Filter out any exam not exactly matching the student's level
+    const exams = user?.level
+      ? rawExams.filter((e: any) => e.level === user.level)
+      : rawExams;
+
+    return { exams, user };
+  } catch {
+    return { exams: [], user: null };
   }
 }
 
@@ -26,13 +35,20 @@ export default async function StudentExamsPage() {
   const token = cookies().get('jwt')?.value;
   if (!token) redirect('/login');
 
-  const exams = await fetchStudentExams(token);
+  const { exams, user } = await fetchExamsAndUser(token);
 
   return (
     <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="page-title">Available Assessments</h1>
-        <p className="text-slate-500 mt-2">Test your knowledge across your enrolled courses</p>
+      <div className="flex items-end justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="page-title">Available Assessments</h1>
+          <p className="text-slate-500 mt-2">Test your knowledge across your enrolled courses</p>
+        </div>
+        {user?.level && (
+          <span className="px-4 py-2 bg-indigo-50 text-indigo-700 text-xs font-black rounded-full border border-indigo-100 shadow-sm">
+            {user.level}
+          </span>
+        )}
       </div>
 
       {exams.length === 0 ? (
@@ -42,16 +58,16 @@ export default async function StudentExamsPage() {
           </div>
           <h3 className="text-2xl font-black text-slate-800 mb-3 tracking-tight font-display">No Exams Available</h3>
           <p className="text-slate-500 text-lg max-w-md mx-auto">
-            You don&apos;t have any pending assessments at the moment. Keep learning and check back later!
+            You don&apos;t have any pending assessments for your level at the moment. Keep learning and check back later!
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {exams.map((exam: any) => (
-            <ExamCard 
-              key={exam._id} 
-              courseId={exam.course?._id || exam.course} 
-              exam={exam} 
+            <ExamCard
+              key={exam._id}
+              courseId={exam.course?._id || exam.course}
+              exam={exam}
             />
           ))}
         </div>

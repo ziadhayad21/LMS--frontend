@@ -113,16 +113,10 @@ export default async function StudentDashboard() {
                       <p className="font-black text-slate-800 truncate text-base leading-none mb-3 group-hover:text-indigo-600 transition-colors">
                         {p.course?.title}
                       </p>
-                      <div className="flex items-center gap-4">
-                        <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-indigo-500 rounded-full transition-all duration-700"
-                            style={{ width: `${p.completionPercentage ?? 0}%` }}
-                          />
-                        </div>
-                        <span className="text-[10px] text-slate-400 shrink-0 font-black uppercase tracking-widest">
-                          {p.completionPercentage ?? 0}%
-                        </span>
+                      <div className="flex items-center gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                        <span>{p.completedLessons?.length || 0} Lessons Complete</span>
+                        <span>•</span>
+                        <span>{p.course?.level || 'Academic'}</span>
                       </div>
                     </div>
                     <Link

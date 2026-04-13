@@ -4,27 +4,27 @@ import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { lessonApi } from '@/lib/api/lessons.api';
 
-interface Props { courseId?: string }
+interface Props { courseId: string }
 
 export default function LessonUploadForm({ courseId }: Props) {
   const router = useRouter();
 
-  const [title,      setTitle]      = useState('');
-  const [description,setDescription]= useState('');
-  const [level,       setLevel]       = useState('');
-  const [videoUrl,   setVideoUrl]   = useState('');
-  const [videoFile,  setVideoFile]  = useState<File | null>(null);
-  const [pdfFile,    setPdfFile]    = useState<File | null>(null);
-  const [order,      setOrder]      = useState('1');
-  const [isPreview,  setIsPreview]  = useState(false);
-  const [isPublished,setIsPublished]= useState(true);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [level, setLevel] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [order, setOrder] = useState('1');
+  const [isPreview, setIsPreview] = useState(false);
+  const [isPublished, setIsPublished] = useState(true);
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
 
-  const [saving,    setSaving]    = useState(false);
-  const [progress,  setProgress]  = useState(0);
-  const [error,     setError]     = useState('');
+  const [saving, setSaving] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const pdfInputRef  = useRef<HTMLInputElement>(null);
+  const pdfInputRef = useRef<HTMLInputElement>(null);
 
   const levels = [
     'أولى إعدادي',
@@ -63,29 +63,38 @@ export default function LessonUploadForm({ courseId }: Props) {
     if (!title.trim()) { setError('Lesson title is required.'); return; }
     if (!level) { setError('يرجى اختيار السنة الدراسية'); return; }
     if (uploadMode === 'file' && !videoFile) { setError('Please select a video file.'); return; }
-    if (uploadMode === 'url'  && !videoUrl.trim()) { setError('Please enter a video URL.'); return; }
+    if (uploadMode === 'url' && !videoUrl.trim()) { setError('Please enter a video URL.'); return; }
 
     setSaving(true);
     setError('');
 
     try {
       const payload = {
-        title:       title.trim(),
+        title: title.trim(),
         description: description.trim() || undefined,
         level,
-        order:       parseInt(order, 10) || 1,
+        order: parseInt(order, 10) || 1,
         isPreview,
         isPublished,
-        videoUrl:    uploadMode === 'url' ? videoUrl.trim() : undefined,
+        videoUrl: uploadMode === 'url' ? videoUrl.trim() : undefined,
       };
 
-      const newLesson = courseId 
-        ? await lessonApi.create(courseId, payload, uploadMode === 'file' ? videoFile ?? undefined : undefined, pdfFile ?? undefined)
-        : await lessonApi.createAcademic(payload, uploadMode === 'file' ? videoFile ?? undefined : undefined, pdfFile ?? undefined);
+      // Lessons MUST be linked to a course — no standalone creation allowed
+      if (!courseId) {
+        setError('No course selected. Please go back and create or select a course first.');
+        setSaving(false);
+        return;
+      }
 
-      const createdLesson = newLesson.data.lesson;
-      const cId = (createdLesson.course as any)?._id || (createdLesson.course as any);
-      router.push(`/teacher/lessons/${createdLesson._id}/preview?courseId=${cId}`);
+      await lessonApi.create(
+        courseId,
+        payload,
+        uploadMode === 'file' ? videoFile ?? undefined : undefined,
+        pdfFile ?? undefined
+      );
+
+      // After creating the lesson, return to the course detail page
+      router.push(`/teacher/courses/${courseId}`);
       router.refresh();
     } catch (e: any) {
       setError(e.message ?? 'Upload failed.');
@@ -115,10 +124,10 @@ export default function LessonUploadForm({ courseId }: Props) {
           <label className="block text-sm font-medium text-slate-700 mb-1.5 text-right font-bold" dir="rtl">
             السنة الدراسية (Level) <span className="text-red-500">*</span>
           </label>
-          <select 
-            value={level} 
-            onChange={(e) => setLevel(e.target.value)} 
-            className="input-field text-right font-bold h-[42px]" 
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+            className="input-field text-right font-bold h-[42px]"
             dir="rtl"
           >
             <option value="" disabled>اختر المستوى الدراسي</option>
@@ -145,11 +154,10 @@ export default function LessonUploadForm({ courseId }: Props) {
               key={mode}
               type="button"
               onClick={() => setUploadMode(mode)}
-              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                uploadMode === mode
+              className={`flex-1 py-2.5 text-sm font-medium transition-colors ${uploadMode === mode
                   ? 'bg-primary-600 text-white'
                   : 'bg-white text-slate-600 hover:bg-slate-50'
-              }`}
+                }`}
             >
               {mode === 'file' ? '📁 Upload File' : '🔗 External URL'}
             </button>

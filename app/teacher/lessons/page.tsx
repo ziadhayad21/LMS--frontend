@@ -31,12 +31,31 @@ export default async function TeacherLessonsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="page-title">Manage Lessons</h1>
-          <p className="text-slate-500 mt-1 text-sm">View, edit, and delete your lessons</p>
+          <h1 className="page-title">All Lessons</h1>
+          <p className="text-slate-500 mt-1 text-sm">
+            View and manage lessons across all your courses.
+          </p>
         </div>
-        <Link href="/teacher/lessons/new" className="btn-primary">
-          + Add Lesson
+        {/* Lessons must be added from inside a course — direct the teacher there */}
+        <Link href="/teacher/courses" className="btn-primary">
+          ← Manage Courses
         </Link>
+      </div>
+
+      {/* Informational banner */}
+      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 flex items-start gap-4">
+        <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center shrink-0 text-indigo-600 text-lg">
+          ℹ️
+        </div>
+        <div>
+          <p className="font-bold text-indigo-800 text-sm">To add a new lesson, go into a Course first.</p>
+          <p className="text-indigo-600 text-xs mt-1">
+            All lessons must belong to a course.{' '}
+            <Link href="/teacher/courses" className="underline font-bold hover:text-indigo-800">
+              Browse your courses →
+            </Link>
+          </p>
+        </div>
       </div>
 
       <div className="card">

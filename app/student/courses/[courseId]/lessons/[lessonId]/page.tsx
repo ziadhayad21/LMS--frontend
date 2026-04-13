@@ -15,7 +15,7 @@ class SegmentTracker {
   private lastPos: number = 0;
 
   onTick(currentSeconds: number) {
-    const JUMP_THRESHOLD = 2; 
+    const JUMP_THRESHOLD = 2;
 
     if (this.segStart === null) {
       this.segStart = currentSeconds;
@@ -60,20 +60,20 @@ class SegmentTracker {
 export default function LessonPage() {
   const params = useParams();
   const router = useRouter();
-  
+
   // State
-  const [lesson,    setLesson]    = useState<any>(null);
-  const [loading,   setLoading]   = useState(true);
-  const [error,     setError]     = useState('');
+  const [lesson, setLesson] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [completed, setCompleted] = useState(false);
-  const [played,    setPlayed]    = useState(0); 
-  const [playing,   setPlaying]   = useState(false);
-  const [duration,  setDuration]  = useState(0);
+  const [played, setPlayed] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
 
   // Refs
-  const tracker      = useRef(new SegmentTracker());
-  const markedRef    = useRef(false);
-  const syncRef      = useRef({
+  const tracker = useRef(new SegmentTracker());
+  const markedRef = useRef(false);
+  const syncRef = useRef({
     courseId: params.courseId as string,
     lessonId: params.lessonId as string,
   });
@@ -86,15 +86,15 @@ export default function LessonPage() {
   /** Send current tracked segments to the backend */
   const syncProgress = useCallback(() => {
     tracker.current.flush();
-    const ranges        = tracker.current.getMergedRanges();
-    const watchedSecs   = tracker.current.getTotalWatched();
+    const ranges = tracker.current.getMergedRanges();
+    const watchedSecs = tracker.current.getTotalWatched();
     const { courseId, lessonId } = syncRef.current;
-    
+
     if (watchedSecs === 0 && ranges.length === 0) return;
 
     lessonApi
       .completeLesson(courseId, lessonId, Math.round(watchedSecs), Math.round(duration || 0), ranges)
-      .catch(() => {});
+      .catch(() => { });
   }, [duration]);
 
   // Initial Fetch
@@ -131,7 +131,7 @@ export default function LessonPage() {
     const { courseId, lessonId } = syncRef.current;
     if (d > 0) {
       lessonApi.completeLesson(courseId, lessonId, 0, Math.round(d), [])
-        .catch(() => {});
+        .catch(() => { });
     }
   };
 
@@ -145,7 +145,7 @@ export default function LessonPage() {
     }
   };
 
-  const handlePlay  = () => setPlaying(true);
+  const handlePlay = () => setPlaying(true);
   const handlePause = () => {
     setPlaying(false);
     syncProgress();
@@ -162,11 +162,11 @@ export default function LessonPage() {
   const videoUrl = lesson?.videoUrl
     ? lesson.videoUrl
     : lesson?.videoFile?.filename
-    ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '')}/uploads/videos/${lesson.videoFile.filename}`
-    : null;
+      ? `/uploads/videos/${lesson.videoFile.filename}`
+      : null;
 
   const pdfUrl = lesson?.pdfFile?.filename
-    ? `${process.env.NEXT_PUBLIC_API_URL?.replace('/api/v1', '')}/uploads/lessons/${lesson.pdfFile.filename}`
+    ? `/uploads/lessons/${lesson.pdfFile.filename}`
     : null;
 
   if (loading) return (
@@ -174,14 +174,14 @@ export default function LessonPage() {
       <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
-  
+
   if (error) return (
     <div className="p-8 text-center bg-red-50 rounded-2xl border border-red-100">
       <p className="text-red-700 font-bold">{error}</p>
       <Link href={`/student/courses/${params.courseId}`} className="text-red-600 underline mt-4 inline-block">Return to Course</Link>
     </div>
   );
-  
+
   if (!lesson) return null;
 
   return (
@@ -207,7 +207,7 @@ export default function LessonPage() {
               onPause={handlePause}
               onEnded={handleEnded}
               config={{
-                file: { attributes: { controlsList: 'nodownload' } },
+                file: { attributes: { controlsList: 'nodownload', crossOrigin: 'anonymous' } },
               }}
             />
           ) : (
