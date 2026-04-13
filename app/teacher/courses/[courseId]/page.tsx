@@ -36,7 +36,7 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <Link href="/teacher/courses" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
-            ← Back to Courses
+            ← Back to ALL Courses
           </Link>
           <h1 className="page-title mt-2">{course.title}</h1>
           <div className="flex items-center gap-3 mt-2 flex-wrap">
