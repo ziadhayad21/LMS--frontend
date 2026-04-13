@@ -7,7 +7,7 @@ import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Bell } from 'lucid
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const [open, setOpen]  = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-8 flex items-center justify-between shrink-0 sticky top-0 z-40 shadow-sm">
@@ -17,16 +17,16 @@ export default function Navbar() {
           <GraduationCap className="text-indigo-600 w-5 h-5" />
         </div>
         <div className="hidden sm:block">
-           <h2 className="text-sm font-black text-slate-800 tracking-tight leading-none">EnglishPro</h2>
-           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">LMS Platform</p>
+          <h2 className="text-sm font-black text-slate-800 tracking-tight leading-none">EnglishPro</h2>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">LMS Platform</p>
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-6">
         <button className="relative w-10 h-10 rounded-xl hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors group">
-           <Bell className="w-5 h-5" />
-           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white ring-2 ring-indigo-500/20 animate-pulse" />
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white ring-2 ring-indigo-500/20 animate-pulse" />
         </button>
 
         <div className="relative">
@@ -59,7 +59,7 @@ export default function Navbar() {
                 </div>
                 <div className="p-2">
                   <Link
-                    href={user?.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard'}
+                    href={user?.role === 'teacher' || user?.role === 'admin' ? '/teacher/dashboard' : '/student/dashboard'}
                     className="flex items-center gap-3 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 rounded-2xl transition-all"
                     onClick={() => setOpen(false)}
                   >
