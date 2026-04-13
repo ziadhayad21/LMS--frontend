@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 function isAllowedPdfUrl(url: string) {
@@ -8,7 +8,8 @@ function isAllowedPdfUrl(url: string) {
   return url.startsWith('/uploads/') || url.startsWith('/api/v1/');
 }
 
-export default function PdfViewerClient() {
+/** Inner component — useSearchParams must live here, inside a Suspense boundary */
+function PdfViewerInner() {
   const params = useSearchParams();
   const router = useRouter();
   const url = params.get('url') || '';
@@ -49,7 +50,7 @@ export default function PdfViewerClient() {
         <div className="min-w-0">
           <h1 className="page-title truncate">{title}</h1>
           <p className="text-sm text-slate-500 mt-1">
-            If the PDF doesn’t load, use the download button.
+            If the PDF doesn't load, use the download button.
           </p>
         </div>
         {pdfUrl ? (
@@ -81,6 +82,21 @@ export default function PdfViewerClient() {
         )}
       </div>
     </div>
+  );
+}
+
+/** Outer shell — wraps PdfViewerInner in Suspense so useSearchParams is safe */
+export default function PdfViewerClient() {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-6xl mx-auto p-8">
+          <div className="card p-8 text-center text-slate-500">Loading PDF…</div>
+        </div>
+      }
+    >
+      <PdfViewerInner />
+    </Suspense>
   );
 }
 
