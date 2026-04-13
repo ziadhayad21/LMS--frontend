@@ -2,15 +2,25 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api/client';
 
+type Step = 'IDENTIFIER' | 'OTP';
+
 export default function ForgotPasswordForm() {
+  const router = useRouter();
+  const [step, setStep] = useState<Step>('IDENTIFIER');
   const [identifier, setIdentifier] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const onSubmit = async (e: React.FormEvent) => {
+  // Step 1: Request OTP
+  const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identifier.trim()) return setError('Please enter your email or phone number.');
 
@@ -18,84 +28,139 @@ export default function ForgotPasswordForm() {
     setError('');
     setMessage('');
     try {
-      const res: any = await apiClient.post('/auth/forgot-password', { identifier: identifier.trim() });
-      setMessage(res?.message || 'A reset link has been sent to your email.');
+      await apiClient.post('/auth/forgot-password', { identifier: identifier.trim() });
+      setStep('OTP');
+      setMessage('A 6-digit code has been sent to your account.');
     } catch (err: any) {
-      setError(err.message || 'Failed to send reset link.');
+      setError(err.message || 'Failed to send reset code.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Step 2: Verify OTP and Reset Password
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) return setError('Please enter the 6-digit code.');
+    if (newPassword.length < 8) return setError('Password must be at least 8 characters.');
+    if (newPassword !== confirmPassword) return setError('Passwords do not match.');
+
+    setLoading(true);
+    setError('');
+    try {
+      await apiClient.post('/auth/verify-reset-otp', {
+        identifier: identifier.trim(),
+        otp: otp.trim(),
+        newPassword,
+      });
+      setMessage('Password reset successfully! Redirecting...');
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Invalid code or reset failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (step === 'IDENTIFIER') {
+    return (
+      <form onSubmit={handleRequestOtp} className="space-y-5 animate-fade-in shadow-sm p-1 rounded-2xl">
+        {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">{error}</div>}
+        {message && <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-xl">{message}</div>}
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Email or Phone Number</label>
+          <input
+            type="text"
+            className="input-field"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            placeholder="e.g. user@gmail.com or 01xxxxxxxxx"
+            required
+          />
+        </div>
+
+        <button type="submit" disabled={loading} className="btn-primary w-full h-12">
+          {loading ? 'Sending Code...' : 'Send Reset Code'}
+        </button>
+
+        <div className="text-sm text-center pt-2">
+          <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            Back to Login
+          </Link>
+        </div>
+      </form>
+    );
+  }
+
   return (
-    <form onSubmit={onSubmit} className="space-y-5 animate-fade-in shadow-sm p-1 rounded-2xl">
-      {error && (
-        <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-xl animate-shake">
-          {error}
-        </div>
-      )}
-      
-      {message ? (
-        <div className="bg-indigo-50 border border-indigo-100 p-6 rounded-2xl text-center space-y-3">
-          <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <p className="text-indigo-900 font-semibold">{message}</p>
-          <p className="text-sm text-indigo-600/70">Please check your inbox (and spam folder) for the reset link.</p>
-          <button 
-            type="button" 
-            onClick={() => setMessage('')}
-            className="text-xs font-medium text-indigo-500 hover:underline pt-2"
-          >
-            Didn&apos;t receive it? Try again
-          </button>
-        </div>
-      ) : (
-        <>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2 ml-1">Email or Phone Number</label>
-            <div className="relative group">
-              <input
-                type="text"
-                className="input-field pl-11 focus:ring-indigo-500/20"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="you@example.com or 01xxxxxxxxx"
-                required
-              />
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-            </div>
-          </div>
+    <form onSubmit={handleResetPassword} className="space-y-5 animate-fade-in shadow-sm p-1">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">{error}</div>}
+      {message && <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm px-4 py-3 rounded-xl">{message}</div>}
 
-          <button 
-            type="submit" 
-            disabled={loading} 
-            className="btn-primary w-full h-12 shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all active:scale-[0.98]"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Sending Link...
-              </span>
-            ) : 'Send Reset Link'}
-          </button>
+      <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-start gap-3">
+        <div className="text-blue-500 mt-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+        </div>
+        <p className="text-xs text-blue-700 leading-relaxed">
+          We&apos;ve sent a 6-digit code to <strong>{identifier}</strong>. Please enter it below along with your new password.
+        </p>
+      </div>
 
-          <div className="text-sm text-center pt-2">
-            <Link href="/login" className="text-slate-500 hover:text-indigo-600 font-medium transition-colors">
-              Back to Login
-            </Link>
-          </div>
-        </>
-      )}
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Verification Code</label>
+        <input
+          type="text"
+          maxLength={6}
+          className="input-field text-center text-2xl tracking-[0.5em] font-mono h-14"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+          placeholder="000000"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">New Password</label>
+        <input
+          type="password"
+          className="input-field"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Confirm New Password</label>
+        <input
+          type="password"
+          className="input-field"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button type="submit" disabled={loading} className="btn-primary w-full h-12">
+        {loading ? 'Resetting Password...' : 'Reset Password'}
+      </button>
+
+      <div className="text-sm text-center pt-2">
+        <button 
+          type="button" 
+          onClick={() => setStep('IDENTIFIER')}
+          className="text-slate-500 hover:text-slate-700"
+        >
+          Try another email/phone
+        </button>
+      </div>
     </form>
   );
 }
