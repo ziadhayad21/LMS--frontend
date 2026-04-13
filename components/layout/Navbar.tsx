@@ -3,7 +3,7 @@
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Bell, Menu, X } from 'lucide-react';
+import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Bell, Menu, X, LayoutGrid } from 'lucide-react';
 import { TEACHER_NAV_ITEMS, STUDENT_NAV_ITEMS } from '@/lib/constants/navigation';
 import clsx from 'clsx';
 
@@ -11,6 +11,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sectionsOpen, setSectionsOpen] = useState(false);
 
   const navItems = user?.role === 'teacher' || user?.role === 'admin' ? TEACHER_NAV_ITEMS : STUDENT_NAV_ITEMS;
 
@@ -40,6 +41,50 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-3 md:gap-6">
+          {/* Quick Sections Toggle */}
+          <div className="relative">
+            <button
+              onClick={() => setSectionsOpen(!sectionsOpen)}
+              className={clsx(
+                "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300",
+                sectionsOpen ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" : "text-slate-400 hover:bg-slate-50 hover:text-indigo-600"
+              )}
+            >
+              <LayoutGrid className="w-5 h-5" />
+            </button>
+
+            {sectionsOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setSectionsOpen(false)} />
+                <div className="absolute right-0 top-full mt-3 w-[280px] sm:w-[320px] bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl z-20 p-6 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="mb-4">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Quick Navigation</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {navItems.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setSectionsOpen(false)}
+                          className="flex flex-col items-center gap-3 p-4 rounded-3xl bg-slate-50 hover:bg-indigo-50 hover:scale-[1.02] active:scale-95 transition-all text-center group"
+                        >
+                          <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-slate-400 group-hover:text-indigo-600 shadow-sm transition-colors">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <span className="text-[10px] font-black text-slate-600 group-hover:text-indigo-700 uppercase tracking-tighter">
+                            {item.label}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
           <button className="relative w-10 h-10 rounded-xl hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors group">
             <Bell className="w-5 h-5" />
             <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white ring-2 ring-indigo-500/20 animate-pulse" />
