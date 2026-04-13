@@ -14,7 +14,7 @@ interface AuthState {
 }
 
 interface AuthContextValue extends AuthState {
-  login:       (email: string, password: string) => Promise<void>;
+  login:       (identifier: string, password: string) => Promise<void>;
   logout:      () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -52,8 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Hydrate on mount — check if cookie-based session exists
   useEffect(() => { refreshUser(); }, [refreshUser]);
 
-  const login = async (email: string, password: string) => {
-    const res  = await authApi.login({ email, password });
+  const login = async (identifier: string, password: string) => {
+    const res  = await authApi.login({ identifier, password });
     const user = res.data.user;
     setState({ user, isLoading: false, isAuthenticated: true });
     if (user.role === 'student' && user.status === 'pending') {

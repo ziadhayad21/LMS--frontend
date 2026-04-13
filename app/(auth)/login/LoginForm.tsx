@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function LoginForm() {
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ identifier: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ export default function LoginForm() {
     setLoading(true);
     setError('');
     try {
-      await login(form.email, form.password);
+      await login(form.identifier, form.password);
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
@@ -40,8 +40,8 @@ export default function LoginForm() {
       )}
 
       <div className="space-y-2">
-        <label htmlFor="email" className="block text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
-          Authorized Email
+        <label htmlFor="identifier" className="block text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
+          Email or Phone
         </label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -50,15 +50,15 @@ export default function LoginForm() {
             </svg>
           </div>
           <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
+            id="identifier"
+            name="identifier"
+            type="text"
+            autoComplete="username"
             required
-            value={form.email}
+            value={form.identifier}
             onChange={handleChange}
             className="input-field !pl-12 !bg-white focus:shadow-xl focus:shadow-brand-500/5"
-            placeholder="name.pro@domain.com"
+            placeholder="name@email.com or 01XXXXXXXXX"
           />
         </div>
       </div>

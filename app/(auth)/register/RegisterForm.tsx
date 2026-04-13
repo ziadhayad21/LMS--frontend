@@ -9,10 +9,16 @@ export default function RegisterForm() {
   const { login } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState({
-    name: '', email: '', password: '', level: '',
+    name: '', email: '', phone: '', password: '', level: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const validatePhone = (raw: string) => {
+    const v = String(raw || '').replace(/\s+/g, '').trim();
+    if (!/^01[0125]\d{8}$/.test(v)) return 'رقم الهاتف غير صالح. مثال: 01XXXXXXXXX';
+    return '';
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,10 +31,15 @@ export default function RegisterForm() {
       setError('يرجى اختيار السنة الدراسية');
       return;
     }
+    const phoneErr = validatePhone(form.phone);
+    if (phoneErr) {
+      setError(phoneErr);
+      return;
+    }
     setLoading(true);
     setError('');
     try {
-      await authApi.register(form);
+      await authApi.register({ ...form, phone: form.phone.replace(/\s+/g, '').trim() });
       // Auto-login after registration
       await login(form.email, form.password);
     } catch (err: any) {
@@ -111,6 +122,26 @@ export default function RegisterForm() {
           className="input-field !bg-white focus:shadow-xl focus:shadow-brand-500/5"
           placeholder="your@email.com"
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="phone" className="block text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">
+          Phone Number
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputMode="numeric"
+          required
+          value={form.phone}
+          onChange={handleChange}
+          className="input-field !bg-white focus:shadow-xl focus:shadow-brand-500/5"
+          placeholder="01XXXXXXXXX"
+        />
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest pl-1">
+          Egyptian format (010/011/012/015)
+        </p>
       </div>
 
       <div className="space-y-2">

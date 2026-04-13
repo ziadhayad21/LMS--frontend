@@ -7,6 +7,7 @@ export interface User {
   _id:             string;
   name:            string;
   email:           string;
+  phone?:          string;
   role:            UserRole;
   status:          UserStatus;
   level?:          string;
@@ -216,13 +217,14 @@ export type ApiResponse<T> = ApiSuccess<T> | ApiError;
 export interface RegisterPayload {
   name:      string;
   email:     string;
+  phone:     string;
   password:  string;
   level?:    string;
 }
 
 export interface LoginPayload {
-  email:    string;
-  password: string;
+  identifier: string; // email or phone
+  password:   string;
 }
 
 export interface CreateCoursePayload {
