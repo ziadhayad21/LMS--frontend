@@ -5,16 +5,10 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import clsx from 'clsx';
 import { LayoutDashboard, Video, LogOut, ChevronRight, GraduationCap, BookOpen, PlusCircle, Trophy } from 'lucide-react';
-
-const navItems = [
-  { href: '/student/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/student/lessons', icon: Video, label: 'Lessons' },
-  { href: '/student/exams', icon: Trophy, label: 'Exams' },
-];
-
+import { STUDENT_NAV_ITEMS as navItems } from '@/lib/constants/navigation';
 
 export default function StudentSidebar() {
-  const pathname      = usePathname();
+  const pathname = usePathname();
   const { user, logout } = useAuth();
 
   return (
@@ -62,25 +56,25 @@ export default function StudentSidebar() {
         <div className="p-6 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-4 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-slate-100">
-               <span className="text-indigo-600 font-black text-lg">
-                 {user?.name?.charAt(0).toUpperCase()}
-               </span>
+              <span className="text-indigo-600 font-black text-lg">
+                {user?.name?.charAt(0).toUpperCase()}
+              </span>
             </div>
             <div className="min-w-0">
-               <p className="text-sm font-black text-slate-800 truncate">{user?.name}</p>
-               {user?.level ? (
-                 <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-black rounded-md border border-indigo-100">
-                   {user.level}
-                 </span>
-               ) : (
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scholar</p>
-               )}
+              <p className="text-sm font-black text-slate-800 truncate">{user?.name}</p>
+              {user?.level ? (
+                <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-black rounded-md border border-indigo-100">
+                  {user.level}
+                </span>
+              ) : (
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scholar</p>
+              )}
             </div>
           </div>
-          
+
           <button
-             onClick={logout}
-             className="w-full py-3 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100 flex items-center justify-center gap-2"
+            onClick={logout}
+            className="w-full py-3 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100 flex items-center justify-center gap-2"
           >
             <LogOut className="w-3 h-3" /> Logout
           </button>

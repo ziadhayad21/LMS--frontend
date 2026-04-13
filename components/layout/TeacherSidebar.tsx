@@ -6,17 +6,11 @@ import { useAuth } from '@/lib/contexts/AuthContext';
 import clsx from 'clsx';
 import { LayoutDashboard, BookOpen, PlusCircle, LogOut, ChevronRight, GraduationCap, Trophy, Users } from 'lucide-react';
 
-const navItems = [
-  { href: '/teacher/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/teacher/tracking', icon: Users, label: 'Student Tracking' },
-  { href: '/teacher/lessons', icon: BookOpen, label: 'All Lessons' },
-  { href: '/teacher/lessons/new', icon: PlusCircle, label: 'Add Lesson' },
-  { href: '/teacher/exams', icon: Trophy, label: 'Manage Exams' },
-];
+import { TEACHER_NAV_ITEMS as navItems } from '@/lib/constants/navigation';
 
 
 export default function TeacherSidebar() {
-  const pathname         = usePathname();
+  const pathname = usePathname();
   const { user, logout } = useAuth();
 
   return (
@@ -64,19 +58,19 @@ export default function TeacherSidebar() {
         <div className="p-6 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shrink-0 shadow-sm border border-slate-100">
-               <span className="text-indigo-600 font-black text-lg">
-                 {user?.name?.charAt(0).toUpperCase()}
-               </span>
+              <span className="text-indigo-600 font-black text-lg">
+                {user?.name?.charAt(0).toUpperCase()}
+              </span>
             </div>
             <div className="min-w-0">
-               <p className="text-sm font-black text-slate-800 truncate">{user?.name}</p>
-               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Instructor</p>
+              <p className="text-sm font-black text-slate-800 truncate">{user?.name}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Instructor</p>
             </div>
           </div>
-          
+
           <button
-             onClick={logout}
-             className="w-full py-3 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100 flex items-center justify-center gap-2"
+            onClick={logout}
+            className="w-full py-3 bg-white hover:bg-rose-50 text-slate-600 hover:text-rose-600 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100 flex items-center justify-center gap-2"
           >
             <LogOut className="w-3 h-3" /> Logout
           </button>

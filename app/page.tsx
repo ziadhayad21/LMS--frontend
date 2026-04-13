@@ -49,7 +49,7 @@ export default function HomePage() {
               <span className="text-xs font-bold text-brand-700 tracking-wider uppercase">Next Generation Learning v2.0</span>
             </div>
 
-            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-black text-slate-900 leading-[1.05] tracking-tight">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-slate-900 leading-[1.1] md:leading-[1.05] tracking-tight">
               Speak English <br />
               <span className="text-gradient">with Authority.</span>
             </h1>
@@ -105,7 +105,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="absolute -bottom-10 -left-10 glass p-5 rounded-3xl border-white shadow-2xl animate-scale-in">
+              <div className="absolute -bottom-6 md:-bottom-10 -left-6 md:-left-10 glass p-4 sm:p-5 rounded-2xl md:rounded-3xl border-white shadow-2xl animate-scale-in">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="badge-brand font-black">CERTIFIED</span>
@@ -128,7 +128,7 @@ export default function HomePage() {
       {/* Stats Section with Divider */}
       <section className="relative py-12 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-slate-950 rounded-[40px] p-12 relative overflow-hidden shadow-2xl">
+          <div className="bg-slate-950 rounded-[2.5rem] md:rounded-[40px] p-8 md:p-12 relative overflow-hidden shadow-2xl">
             {/* Abstract grid */}
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
@@ -140,8 +140,8 @@ export default function HomePage() {
                 { label: 'Video Hours', val: '800+' },
               ].map((s, i) => (
                 <div key={i} className="text-center">
-                  <p className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tighter">{s.val}</p>
-                  <p className="text-xs font-black text-brand-400 uppercase tracking-[0.2em]">{s.label}</p>
+                  <p className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-1 md:mb-2 tracking-tighter">{s.val}</p>
+                  <p className="text-[9px] sm:text-xs font-black text-brand-400 uppercase tracking-[0.2em]">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -198,7 +198,7 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="py-24 px-6 relative">
-        <div className="max-w-5xl mx-auto bg-brand-600 rounded-[50px] p-12 md:p-20 text-center relative overflow-hidden shadow-[0_40px_100px_-20px_rgba(76,29,149,0.5)]">
+        <div className="max-w-5xl mx-auto bg-brand-600 rounded-[2.5rem] md:rounded-[50px] p-10 md:p-20 text-center relative overflow-hidden shadow-[0_40px_100px_-20px_rgba(76,29,149,0.5)]">
           <div className="absolute top-0 left-0 w-full h-full bg-mesh-indigo mix-blend-overlay opacity-60" />
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent-500 rounded-full blur-[80px] opacity-40 animate-pulse-glow" />
 
