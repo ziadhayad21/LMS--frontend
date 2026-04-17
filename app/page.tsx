@@ -23,7 +23,7 @@ export default function HomePage() {
           <div className="space-y-3">
             <h1 className="font-display text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9]">
               Mr Abdallah <br />
-              <span className="text-brand-600">Elhayad</span>
+              <span className="text-brand-600">Elhayad </span>
             </h1>
             <p className="text-sm font-bold text-slate-400 uppercase tracking-[0.3em] inline-block py-1 border-b-2 border-brand-100">
               Official Learning Platform
