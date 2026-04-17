@@ -33,8 +33,8 @@ export default function Navbar() {
               <GraduationCap className="text-indigo-600 w-5 h-5" />
             </div>
             <div className="hidden sm:block">
-              <h2 className="text-sm font-black text-slate-800 tracking-tight leading-none">EnglishPro</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">LMS Platform</p>
+              <h2 className="text-sm font-black text-slate-800 tracking-tight leading-none">Mr Abdallah Elhayad</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 text-center">LMS Platform</p>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function Navbar() {
                 <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
                   <GraduationCap className="text-white w-6 h-6" />
                 </div>
-                <span className="font-black text-slate-800">EnglishPro</span>
+                <span className="font-black text-slate-800">Mr Abdallah Elhayad</span>
               </div>
               <button onClick={() => setMobileOpen(false)} className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600">
                 <X className="w-6 h-6" />

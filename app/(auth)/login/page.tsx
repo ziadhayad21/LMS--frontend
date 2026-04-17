@@ -34,7 +34,7 @@ export default function LoginPage() {
 
           <div className="mb-8 text-center sm:text-left">
             <h1 className="font-display text-3xl font-black text-slate-900 leading-none">Elevate Your Fluency</h1>
-            <p className="mt-3 text-slate-500 font-bold text-sm tracking-tight">Access your custom curriculum and track your progress.</p>
+            <p className="mt-3 text-slate-500 font-bold text-sm tracking-tight">Access your custom curriculum and track your progress with Mr Abdallah Elhayad.</p>
           </div>
 
           <LoginForm />

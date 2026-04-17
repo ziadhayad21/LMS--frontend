@@ -27,11 +27,25 @@ function PdfViewerInner() {
     let cancelled = false;
     (async () => {
       try {
+        // Try HEAD first (lightweight)
         const res = await fetch(pdfUrl, { method: 'HEAD', credentials: 'include' });
         if (cancelled) return;
-        setHeadOk(res.ok);
-      } catch {
+        
+        if (res.ok) {
+          setHeadOk(true);
+        } else {
+          // If HEAD is rejected (some proxies/servers block it), try a GET with a range
+          const getRes = await fetch(pdfUrl, { 
+            method: 'GET', 
+            credentials: 'include',
+            headers: { 'Range': 'bytes=0-0' } // Only request the first byte
+          });
+          if (cancelled) return;
+          setHeadOk(getRes.ok || getRes.status === 206);
+        }
+      } catch (err) {
         if (cancelled) return;
+        console.error('PDF check failed:', err);
         setHeadOk(false);
       }
     })();

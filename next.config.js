@@ -15,7 +15,8 @@ const nextConfig = {
     return [
       {
         // Default app pages: do not allow embedding
-        source: '/(.*)',
+        // Exclude /api and /uploads from this to avoid conflicting X-Frame-Options
+        source: '/((?!api|uploads).*)',
         headers: [
           { key: 'X-Frame-Options',           value: 'DENY' },
           { key: 'X-Content-Type-Options',    value: 'nosniff' },

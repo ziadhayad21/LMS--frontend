@@ -65,7 +65,6 @@ export default async function CourseDetailPage({ params }: Props) {
         <div className="p-6 flex items-center justify-between flex-wrap gap-4 border-t border-slate-200">
           <div className="flex items-center gap-6 text-sm text-slate-600 font-medium">
             <span>📄 {course.materials?.length ?? 0} materials</span>
-            <span>📝 {course.exams?.length ?? 0} exams</span>
           </div>
         </div>
       </div>
@@ -137,22 +136,6 @@ export default async function CourseDetailPage({ params }: Props) {
         </section>
       )}
 
-      {/* Exams */}
-      {course.exams?.length > 0 && (
-        <section>
-          <h2 className="section-title mb-4">Exams &amp; Quizzes</h2>
-          <div className="space-y-3">
-            {course.exams?.map((exam: any) => (
-              <ExamListItem
-                key={exam._id}
-                courseId={course._id}
-                exam={exam}
-                href={`/student/courses/${course._id}/exams/${exam._id}`}
-              />
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }

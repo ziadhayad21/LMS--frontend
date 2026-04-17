@@ -21,9 +21,10 @@ interface LessonCardProps {
 
 export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps) {
   // Extract courseId safely
-  const cid = (typeof lesson.courseId === 'object' && lesson.courseId !== null)
-    ? (lesson.courseId as any)._id
-    : lesson.courseId;
+  // Extract course ID safely from 'course' property
+  const cid = (typeof lesson.course === 'object' && lesson.course !== null)
+    ? (lesson.course as any)._id
+    : (lesson as any).courseId || lesson.course;
 
   // IMPORTANT: The theater page is at /video, the info page is at /
   // We point to the theater page for the "Watch Video" button.

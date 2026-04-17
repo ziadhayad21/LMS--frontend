@@ -33,8 +33,8 @@ export default function RegisterPage() {
           <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-accent-500/10 rounded-full blur-[40px] pointer-events-none animate-pulse-glow" />
 
           <div className="mb-8 text-center sm:text-left">
-            <h1 className="font-display text-3xl font-black text-slate-900 leading-none">Apply for Access</h1>
-            <p className="mt-3 text-slate-500 font-bold text-sm tracking-tight">Complete your profile to unlock the full curriculum.</p>
+            <h1 className="text-3xl font-black text-slate-900 tracking-tight">Join the Academy</h1>
+            <p className="text-slate-500 font-medium whitespace-pre-line">Create your official Mr Abdallah Elhayad student account</p>
           </div>
 
           <RegisterForm />

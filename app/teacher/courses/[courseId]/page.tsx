@@ -71,19 +71,6 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
           </div>
         </Link>
 
-        {/* CREATE EXAM */}
-        <Link
-          href={`/teacher/courses/${course._id}/exams/new`}
-          className="group flex flex-col items-center justify-center gap-3 p-8 bg-white hover:bg-slate-50 rounded-[2.5rem] border border-slate-200 shadow-soft transition-all active:scale-95"
-        >
-          <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-3xl border border-amber-100 group-hover:scale-110 transition-transform">
-            📝
-          </div>
-          <div className="text-center">
-            <p className="font-black text-slate-800 text-base tracking-tight">Create Exam</p>
-            <p className="text-slate-400 text-xs mt-0.5">{course.exams?.length ?? 0} exam{course.exams?.length !== 1 ? 's' : ''}</p>
-          </div>
-        </Link>
       </div>
 
       {/* ── Lessons List ────────────────────────────────────────────────────────── */}
@@ -140,54 +127,6 @@ export default async function TeacherCourseDetailPage({ params }: Props) {
         )}
       </section>
 
-      {/* ── Exams List ──────────────────────────────────────────────────────────── */}
-      {course.exams?.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="section-title">Exams</h2>
-            <Link href={`/teacher/courses/${course._id}/exams/new`} className="btn-primary text-sm">
-              + Create Exam
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {course.exams?.map((exam: any) => (
-              <div key={exam._id} className="bg-white rounded-[2.5rem] p-7 border border-slate-100 shadow-soft hover:shadow-xl transition-all">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center border border-amber-100 text-2xl">
-                    📝
-                  </div>
-                  {exam.isPublished ? (
-                    <span className="badge-green">Published</span>
-                  ) : (
-                    <span className="badge-amber">Draft</span>
-                  )}
-                </div>
-                <div className="mt-5 space-y-2">
-                  <h3 className="text-lg font-black text-slate-800 tracking-tight line-clamp-2">{exam.title}</h3>
-                  <p className="text-sm text-slate-500 font-medium line-clamp-2">{exam.description || '—'}</p>
-                </div>
-                <div className="mt-5 text-xs text-slate-500 space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="badge-slate">Pass {exam.passingScore}%</span>
-                    {exam.timeLimit ? <span className="badge-slate">{exam.timeLimit} min</span> : <span className="badge-slate">No limit</span>}
-                    {exam.availableFrom || exam.availableUntil ? (
-                      <span className="badge-blue">Scheduled</span>
-                    ) : null}
-                  </div>
-                </div>
-                <div className="mt-6 flex items-center gap-2">
-                  <Link href={`/teacher/courses/${course._id}/exams/${exam._id}/results`} className="btn-secondary flex-1 text-sm text-center">
-                    Results
-                  </Link>
-                  <Link href={`/teacher/courses/${course._id}/exams/${exam._id}`} className="btn-primary flex-1 text-sm text-center">
-                    Manage
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
