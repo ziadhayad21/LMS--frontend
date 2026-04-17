@@ -106,12 +106,14 @@ export default function LessonUploadForm({ courseId, initialData }: Props) {
           courseId,
           initialData._id,
           payload,
+          undefined, // videoFile (it's already uploaded to Cloudinary if needed)
           pdfFile ?? undefined
         );
       } else {
         await lessonApi.create(
           courseId,
           payload,
+          undefined, // videoFile
           pdfFile ?? undefined
         );
       }
