@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/lib/contexts/AuthContext';
+import { useAuth } from '../../lib/contexts/AuthContext';
 import clsx from 'clsx';
-import { LayoutDashboard, BookOpen, PlusCircle, LogOut, ChevronRight, GraduationCap, Trophy, Users } from 'lucide-react';
+import { Layout, BookOpen, PlusCircle, LogOut, ChevronRight, School, Trophy, Users } from 'lucide-react';
 
-import { TEACHER_NAV_ITEMS as navItems } from '@/lib/constants/navigation';
+import { TEACHER_NAV_ITEMS as navItems } from '../../lib/constants/navigation';
 
 
 export default function TeacherSidebar() {
@@ -18,7 +18,7 @@ export default function TeacherSidebar() {
       {/* Academy Logo */}
       <div className="h-24 flex items-center gap-4 px-8">
         <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 rotate-3 group-hover:rotate-0 transition-transform">
-          <GraduationCap className="text-white w-7 h-7" />
+          <School className="text-white w-7 h-7" />
         </div>
         <div className="flex flex-col">
           <span className="font-black text-slate-800 tracking-tight leading-none text-lg">Mr Abdallah Elhayad</span>
@@ -80,4 +80,3 @@ export default function TeacherSidebar() {
     </aside>
   );
 }
-

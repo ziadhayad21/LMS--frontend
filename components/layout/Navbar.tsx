@@ -1,10 +1,10 @@
 'use client';
 
-import { useAuth } from '@/lib/contexts/AuthContext';
+import { useAuth } from '../../lib/contexts/AuthContext';
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, LogOut, LayoutDashboard, GraduationCap, Menu, X, LayoutGrid } from 'lucide-react';
-import { TEACHER_NAV_ITEMS, STUDENT_NAV_ITEMS } from '@/lib/constants/navigation';
+import { ChevronDown, LogOut, Layout, School, Menu, X, Grid } from 'lucide-react';
+import { TEACHER_NAV_ITEMS, STUDENT_NAV_ITEMS } from '../../lib/constants/navigation';
 import clsx from 'clsx';
 
 export default function Navbar() {
@@ -30,7 +30,7 @@ export default function Navbar() {
           {/* Brand / Context */}
           <div className="flex items-center gap-3 md:gap-4 group cursor-default">
             <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 group-hover:scale-110 transition-transform">
-              <GraduationCap className="text-indigo-600 w-5 h-5" />
+              <School className="text-indigo-600 w-5 h-5" />
             </div>
             <div className="hidden sm:block">
               <h2 className="text-sm font-black text-slate-800 tracking-tight leading-none">Mr Abdallah Elhayad</h2>
@@ -50,7 +50,7 @@ export default function Navbar() {
                 sectionsOpen ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" : "text-slate-400 hover:bg-slate-50 hover:text-indigo-600"
               )}
             >
-              <LayoutGrid className="w-5 h-5" />
+              <Grid className="w-5 h-5" />
             </button>
 
             {sectionsOpen && (
@@ -119,7 +119,7 @@ export default function Navbar() {
                       className="flex items-center gap-3 px-4 py-3 text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 rounded-2xl transition-all"
                       onClick={() => setOpen(false)}
                     >
-                      <LayoutDashboard className="w-4 h-4 text-indigo-500" />
+                      <Layout className="w-4 h-4 text-indigo-500" />
                       Administrative Panel
                     </Link>
                     <button
@@ -145,7 +145,7 @@ export default function Navbar() {
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
-                  <GraduationCap className="text-white w-6 h-6" />
+                  <School className="text-white w-6 h-6" />
                 </div>
                 <span className="font-black text-slate-800">Mr Abdallah Elhayad</span>
               </div>

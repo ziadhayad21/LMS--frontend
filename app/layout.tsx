@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
-import { AuthProvider } from '@/lib/contexts/AuthContext';
+import { AuthProvider } from '../lib/contexts/AuthContext';
 import './globals.css';
 
 const inter = Plus_Jakarta_Sans({
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'),
   title: {
     template: '%s | Mr Abdallah Elhayad',
-    default:  'Mr Abdallah Elhayad — English Learning Platform',
+    default:  'Mr Abdallah Elhayad - English Learning Platform',
   },
   description:
     'The official English learning platform by Mr Abdallah Elhayad. Quality video lessons, materials, and comprehensive courses.',
