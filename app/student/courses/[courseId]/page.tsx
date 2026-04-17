@@ -9,8 +9,6 @@ import api from '@/src/api/axios';
 
 interface Props { params: { courseId: string } }
 
-const API_BASE = (process.env.VITE_API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://lms-backend-production-3598.up.railway.app').replace(/\/api\/v1$/, '');
-
 async function fetchCourse(courseId: string, token?: string) {
   try {
     const res: any = await api.get(`/courses/${courseId}`, {
@@ -105,9 +103,8 @@ export default async function CourseDetailPage({ params }: Props) {
           <h2 className="section-title mb-4">Materials &amp; Downloads</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {course.materials?.map((mat: any) => (
-              <a
+              <div
                 key={mat._id}
-                href={`${API_BASE}/api/v1/courses/${course._id}/materials/${mat._id}/download`}
                 className="card p-4 flex items-center gap-3 hover:border-primary-200 transition-colors group"
               >
                 <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center shrink-0">
@@ -115,10 +112,26 @@ export default async function CourseDetailPage({ params }: Props) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-slate-800 text-sm truncate">{mat.title}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">PDF · Click to download</p>
+                  <p className="text-xs text-slate-400 mt-0.5">PDF · Preview or download</p>
                 </div>
-                <span className="text-slate-300 group-hover:text-primary-400 transition-colors text-sm">↓</span>
-              </a>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    href={`/pdf-viewer?url=${encodeURIComponent(`/api/v1/courses/${course._id}/materials/${mat._id}/download`)}&title=${encodeURIComponent(mat.title || 'Material PDF')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-black text-white text-[10px] font-black uppercase tracking-widest transition-all"
+                  >
+                    View
+                  </Link>
+                  <a
+                    href={`/api/v1/courses/${course._id}/materials/${mat._id}/download`}
+                    className="px-3 py-2 rounded-xl border border-slate-200 hover:border-primary-200 text-slate-600 hover:text-primary-700 bg-white text-[10px] font-black uppercase tracking-widest transition-all"
+                    download
+                  >
+                    Download
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </section>

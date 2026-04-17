@@ -22,25 +22,41 @@
   }
 
   body {
-    @apply bg-slate-50/50 text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 font-sans;
+    @apply bg-slate-50/60 text-slate-900 selection:bg-primary-100 selection:text-primary-950 font-sans;
   }
 }
 
 @layer components {
+  .page-title {
+    @apply font-display text-3xl md:text-4xl font-black tracking-tight text-slate-900;
+  }
+
+  .section-title {
+    @apply font-display text-xl md:text-2xl font-black tracking-tight text-slate-900;
+  }
+
+  .card {
+    @apply bg-white rounded-[2.5rem] border border-slate-100 shadow-soft;
+  }
+
   .glass {
     @apply bg-white/80 backdrop-blur-xl border border-white/40 shadow-soft;
   }
 
   .btn-primary {
-    @apply relative overflow-hidden inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-indigo-600 text-white text-sm font-bold rounded-2xl hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none;
+    @apply relative overflow-hidden inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary-600 text-white text-sm font-bold rounded-2xl hover:bg-primary-700 hover:shadow-xl hover:shadow-primary-500/30 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white text-slate-700 text-sm font-bold rounded-2xl border border-slate-300 hover:bg-slate-50 hover:border-slate-400 hover:shadow-md active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none;
   }
  
+  .btn-indigo-soft {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-primary-50 text-primary-700 text-sm font-black rounded-2xl border border-primary-100 hover:bg-primary-100 active:scale-95 transition-all duration-300;
+  }
+
   .input-field {
-    @apply w-full px-5 py-4 bg-white/60 border border-slate-300 rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all duration-300;
+    @apply w-full px-5 py-4 bg-white/70 border border-slate-300 rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500/10 focus:border-primary-500 transition-all duration-300;
   }
  
   .card-academy {
@@ -51,10 +67,12 @@
     @apply inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border;
   }
 
-  .badge-indigo { @apply badge bg-indigo-50 text-indigo-700 border-indigo-100; }
-  .badge-emerald { @apply badge bg-emerald-50 text-emerald-700 border-emerald-100; }
+  .badge-indigo { @apply badge bg-primary-50 text-primary-700 border-primary-100; }
+  .badge-blue   { @apply badge bg-sky-50 text-sky-700 border-sky-100; }
+  .badge-green  { @apply badge bg-emerald-50 text-emerald-700 border-emerald-100; }
   .badge-amber  { @apply badge bg-amber-50 text-amber-700 border-amber-100; }
   .badge-rose   { @apply badge bg-rose-50 text-rose-700 border-rose-100; }
+  .badge-slate  { @apply badge bg-slate-50 text-slate-700 border-slate-200; }
 }
 
 @layer utilities {

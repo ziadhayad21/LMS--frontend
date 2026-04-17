@@ -11,13 +11,33 @@ interface Props {
 export default function ExamListItem({ courseId, exam, attemptCount = 0, href }: Props) {
   const maxAttempts = exam.maxAttempts ?? 1;
   const attemptsUsedUp = maxAttempts !== -1 && attemptCount >= maxAttempts;
+  const now = new Date();
+  const startsAt = exam.availableFrom ? new Date(exam.availableFrom) : null;
+  const endsAt = exam.availableUntil ? new Date(exam.availableUntil) : null;
+
+  const notStarted = !!(startsAt && !Number.isNaN(startsAt.getTime()) && now < startsAt);
+  const ended = !!(endsAt && !Number.isNaN(endsAt.getTime()) && now > endsAt);
+  const timeLocked = notStarted || ended;
+
+  const disabled = attemptsUsedUp || timeLocked;
+
+  const statusText =
+    attemptsUsedUp ? 'Submitted' :
+    ended ? 'Closed' :
+    notStarted ? 'Scheduled' :
+    'Take Exam';
+
+  const helperText =
+    ended ? 'Exam window ended' :
+    notStarted ? `Starts ${startsAt?.toLocaleString?.() ?? ''}` :
+    null;
 
   return (
     <Link
       href={href ?? `/student/courses/${courseId}/exams/${exam._id}`}
-      aria-disabled={attemptsUsedUp}
+      aria-disabled={disabled}
       className={`card p-4 flex items-center gap-4 transition-colors group ${
-        attemptsUsedUp ? 'opacity-60 pointer-events-none' : 'hover:border-primary-200'
+        disabled ? 'opacity-60 pointer-events-none' : 'hover:border-primary-200'
       }`}
     >
       <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center shrink-0">
@@ -33,11 +53,12 @@ export default function ExamListItem({ courseId, exam, attemptCount = 0, href }:
             Max {maxAttempts === -1 ? 'Unlimited' : maxAttempts} attempt{maxAttempts === 1 ? '' : 's'}
           </span>
           {attemptCount > 0 ? <span>Completed: {attemptCount}x</span> : null}
+          {helperText ? <span className="text-slate-500 font-semibold">{helperText}</span> : null}
         </div>
       </div>
 
       <span className="btn-primary text-xs px-3 py-1.5">
-        {attemptsUsedUp ? 'Submitted' : 'Take Exam'}
+        {statusText}
       </span>
     </Link>
   );

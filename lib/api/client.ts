@@ -37,5 +37,4 @@ export const apiUpload = <T = unknown>(
     url,
     data: formData,
     timeout: UPLOAD_TIMEOUT_MS,
-    headers: { 'Content-Type': 'multipart/form-data' }, // Specific header that axios knows how to handle with boundaries
   });

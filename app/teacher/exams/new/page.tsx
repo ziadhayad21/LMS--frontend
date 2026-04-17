@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import ExamUploadForm from '@/components/exams/ExamUploadForm';
+import ExamBuilder from '@/components/exam/ExamBuilder';
 import { Trophy, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -35,7 +35,7 @@ export default async function TeacherNewExamPage() {
       </div>
 
       <div className="card-glass p-8">
-        <ExamUploadForm />
+        <ExamBuilder />
       </div>
     </div>
   );

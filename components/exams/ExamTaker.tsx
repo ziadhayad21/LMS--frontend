@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Clock, Play, FileText, CheckCircle, ArrowRight, AlertCircle, Trophy, BarChart3, ChevronRight } from 'lucide-react';
 import { examApi } from '@/lib/api/exams.api';
+import { useExamProctoring } from '@/components/exam/useExamProctoring';
 
 interface ExamTakerProps {
   courseId: string;
@@ -18,6 +19,14 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
   const [timeLeft, setTimeLeft] = useState<number | null>(exam.timeLimit ? exam.timeLimit * 60 : null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [windowClosed, setWindowClosed] = useState(false);
+  const [violations, setViolations] = useState<Array<{ type: string; at: number }>>([]);
+
+  const proctor = useExamProctoring({
+    enabled: true,
+    requireFullscreen: true,
+    onViolation: (v) => setViolations((prev) => [...prev, { type: v.type, at: Date.now() }]),
+  });
 
   const handleSelectOption = (questionId: string, optionIndex: number) => {
     if (result) return;
@@ -51,6 +60,19 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
     }
   }, [answers, exam._id, exam.timeLimit, isSubmitting, timeLeft]);
 
+  // Best-effort proctoring: enter fullscreen on load and re-request if exited.
+  useEffect(() => {
+    proctor.requestFullscreen().catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!proctor.isSupported) return;
+    if (!proctor.isFullscreen) {
+      proctor.requestFullscreen().catch(() => {});
+    }
+  }, [proctor.isFullscreen, proctor.isSupported]);
+
   // Timer logic
   useEffect(() => {
     if (timeLeft === null || result) return;
@@ -61,6 +83,36 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
     const timer = setInterval(() => setTimeLeft((prev) => (prev ?? 0) - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft, result, handleSubmit]);
+
+  // Scheduling auto-close: if the exam window ends, auto-submit slightly before end.
+  useEffect(() => {
+    if (!exam.availableUntil || result) return;
+    const until = new Date(exam.availableUntil);
+    if (Number.isNaN(until.getTime())) return;
+
+    const tick = () => {
+      const now = Date.now();
+      const msLeft = until.getTime() - now;
+      if (msLeft <= 0) {
+        setWindowClosed(true);
+      }
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+
+    // Submit 1s before the window closes to reduce clock drift issues.
+    const submitAtMs = until.getTime() - 1000;
+    const delay = Math.max(0, submitAtMs - Date.now());
+    const timeout = setTimeout(() => {
+      if (!result) handleSubmit();
+    }, delay);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [exam.availableUntil, handleSubmit, result]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -134,11 +186,53 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
     );
   }
 
+  if (windowClosed) {
+    return (
+      <div className="max-w-3xl mx-auto animate-fade-in">
+        <div className="bg-white rounded-[3.5rem] p-12 text-center border border-slate-100 shadow-soft">
+          <h2 className="text-2xl font-black text-slate-800 tracking-tight font-display">Exam Closed</h2>
+          <p className="text-slate-500 font-medium mt-3">The scheduled time window for this exam has ended.</p>
+          <div className="mt-8">
+            <button onClick={() => router.push(`/student/courses/${courseId}`)} className="btn-primary px-10 py-5 rounded-[2rem] text-sm tracking-widest font-black uppercase">
+              Back to Course
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const currentQuestion = exam.questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / exam.questions.length) * 100;
 
   return (
     <div className="max-w-5xl mx-auto space-y-12">
+      {/* Proctoring banner */}
+      <div className="rounded-3xl border border-slate-100 bg-white shadow-soft p-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full ${proctor.isFullscreen ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+          <p className="text-sm font-bold text-slate-700">
+            {proctor.isFullscreen ? 'Secure mode: Fullscreen active' : 'Secure mode: Please stay in fullscreen'}
+          </p>
+          <p className="text-xs text-slate-500 font-semibold">
+            Tab switches and right-click are blocked (best effort).
+          </p>
+        </div>
+        <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest">
+          <span className="px-3 py-2 rounded-2xl bg-slate-50 border border-slate-100 text-slate-600">
+            Violations: {violations.length}
+          </span>
+          {!proctor.isFullscreen ? (
+            <button
+              onClick={() => proctor.requestFullscreen().catch(() => {})}
+              className="px-4 py-2 rounded-2xl bg-slate-900 hover:bg-black text-white transition-colors"
+            >
+              Enter Fullscreen
+            </button>
+          ) : null}
+        </div>
+      </div>
+
       {/* HUD: Header Info */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-slate-100">
         <div className="space-y-4">

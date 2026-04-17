@@ -27,7 +27,7 @@ const blankQuestion = (): QuestionDraft => ({
 const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 interface Props {
-  courseId: string;
+  courseId?: string;
   initialData?: any;
 }
 
@@ -35,6 +35,7 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
   const router = useRouter();
 
   const isEdit = !!initialData;
+  const isGlobal = !courseId;
 
   // Exam-level state
   const [title, setTitle] = useState(initialData?.title ?? '');
@@ -43,6 +44,13 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
   const [passingScore, setPassingScore] = useState(initialData?.passingScore?.toString() ?? '60');
   const [maxAttempts, setMaxAttempts] = useState(initialData?.maxAttempts?.toString() ?? '1');
   const [shuffle, setShuffle] = useState(initialData?.shuffleQuestions ?? false);
+  const [level, setLevel] = useState(initialData?.level ?? '');
+  const [availableFrom, setAvailableFrom] = useState(
+    initialData?.availableFrom ? new Date(initialData.availableFrom).toISOString().slice(0, 16) : ''
+  );
+  const [availableUntil, setAvailableUntil] = useState(
+    initialData?.availableUntil ? new Date(initialData.availableUntil).toISOString().slice(0, 16) : ''
+  );
 
   // Questions state
   const [questions, setQuestions] = useState<QuestionDraft[]>(
@@ -131,6 +139,15 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
 
   const validate = (): string => {
     if (!title.trim()) return 'Exam title is required.';
+    if (isGlobal && !level) return 'Level is required for a global exam.';
+    if (availableFrom && availableUntil) {
+      const start = new Date(availableFrom);
+      const end = new Date(availableUntil);
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+        return 'Please enter a valid exam start/end time.';
+      }
+      if (end <= start) return 'Exam end time must be after the start time.';
+    }
     for (let i = 0; i < questions.length; i++) {
       const q = questions[i];
       if (!q.questionText.trim()) return `Question ${i + 1}: question text is required.`;
@@ -157,6 +174,9 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
         maxAttempts: parseInt(maxAttempts, 10),
         shuffleQuestions: shuffle,
         isPublished: publish,
+        level: isGlobal ? (level as any) : undefined,
+        availableFrom: availableFrom ? new Date(availableFrom).toISOString() : null,
+        availableUntil: availableUntil ? new Date(availableUntil).toISOString() : null,
         questions: questions.map(({ id, ...q }) => ({
           questionText: q.questionText.trim(),
           options: q.options.map((o) => o.trim()),
@@ -167,11 +187,19 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
       } as any;
 
       if (isEdit) {
-        await examApi.updateCourseExam(courseId, initialData._id, payload);
+        if (courseId) {
+          await examApi.updateCourseExam(courseId, initialData._id, payload);
+        } else {
+          await examApi.updateGlobalExam(initialData._id, payload);
+        }
       } else {
-        await examApi.createCourseExam(courseId, payload);
+        if (courseId) {
+          await examApi.createCourseExam(courseId, payload);
+        } else {
+          await examApi.createGlobalExam(payload);
+        }
       }
-      router.push(`/teacher/courses/${courseId}`);
+      router.push(courseId ? `/teacher/courses/${courseId}` : '/teacher/exams');
       router.refresh();
     } catch (e: any) {
       setError(e.message ?? 'Failed to save exam.');
@@ -193,6 +221,27 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
       {/* ── Exam Settings ── */}
       <div className="card p-6 space-y-5">
         <h2 className="section-title">Exam Settings</h2>
+
+        {isGlobal && (
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              Level <span className="text-red-500">*</span>
+            </label>
+            <select value={level} onChange={(e) => setLevel(e.target.value)} className="input-field">
+              <option value="">Select level...</option>
+              {[
+                'أولى إعدادي',
+                'تانية إعدادي',
+                'تالتة إعدادي',
+                'أولى ثانوي',
+                'تانية ثانوي',
+                'تالتة ثانوي',
+              ].map((l) => (
+                <option key={l} value={l}>{l}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1.5">
@@ -218,6 +267,30 @@ export default function ExamBuilder({ courseId, initialData }: Props) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              Start time (optional)
+            </label>
+            <input
+              type="datetime-local"
+              value={availableFrom}
+              onChange={(e) => setAvailableFrom(e.target.value)}
+              className="input-field"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              End time (optional)
+            </label>
+            <input
+              type="datetime-local"
+              value={availableUntil}
+              onChange={(e) => setAvailableUntil(e.target.value)}
+              className="input-field"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Time Limit (minutes)

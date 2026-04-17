@@ -16,6 +16,12 @@ export const examApi = {
   createGlobalExam: (payload: CreateExamPayload): Promise<ExamResponse> =>
     apiClient.post('/exams', payload),
 
+  updateGlobalExam: (examId: string, payload: Partial<CreateExamPayload>): Promise<ExamResponse> =>
+    apiClient.patch(`/exams/${examId}`, payload),
+
+  deleteGlobalExam: (examId: string): Promise<void> =>
+    apiClient.delete(`/exams/${examId}`),
+
   submitExam: (examId: string, payload: SubmitExamPayload): Promise<ResultResponse> =>
     apiClient.post(`/exams/${examId}/submit`, payload),
 

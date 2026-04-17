@@ -6,14 +6,9 @@ export const uploadApi = {
     const formData = new FormData();
     formData.append('image', file);
 
-    // Using apiClient directly for FormData requires setting headers properly
-    // apiClient sets application/json by default, so we override Content-Type handles it automatically
-    const res = await apiClient.post<ApiSuccess<{ url: string }>>('/upload/image', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
+    // `apiClient` is built on an axios instance that already unwraps `response.data`,
+    // so this call returns the API payload directly (not { data: ... }).
+    const res = await apiClient.post<ApiSuccess<{ url: string }>>('/upload/image', formData);
     return res.data;
   },
 
@@ -21,12 +16,7 @@ export const uploadApi = {
     const formData = new FormData();
     formData.append('video', file);
 
-    const res = await apiClient.post<ApiSuccess<{ url: string }>>('/upload/video', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
+    const res = await apiClient.post<ApiSuccess<{ url: string }>>('/upload/video', formData);
     return res.data;
   },
 };

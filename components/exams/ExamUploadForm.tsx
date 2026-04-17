@@ -48,6 +48,8 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
     timeLimit: 30,
     passingScore: 60,
     maxAttempts: 1,
+    availableFrom: '',
+    availableUntil: '',
   });
 
   const [questions, setQuestions] = useState<QuestionForm[]>([
@@ -108,6 +110,16 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
     if (questions.some(q => !q.questionText || (q.type === 'multiple-choice' && q.options.some(o => !o)))) {
       return setError('Please fill in all questions and multiple-choice options');
     }
+    if (examData.availableFrom && examData.availableUntil) {
+      const start = new Date(examData.availableFrom);
+      const end = new Date(examData.availableUntil);
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+        return setError('Please enter a valid exam start/end time.');
+      }
+      if (end <= start) {
+        return setError('Exam end time must be after the start time.');
+      }
+    }
 
     setIsSubmitting(true);
     setError(null);
@@ -136,7 +148,13 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
         ...examData,
         level: selectedLevel as any,
         questions: processedQuestions
-      };
+      } as any;
+
+      // Convert datetime-local strings to ISO (or null)
+      if (examData.availableFrom) (payload as any).availableFrom = new Date(examData.availableFrom).toISOString();
+      else (payload as any).availableFrom = null;
+      if (examData.availableUntil) (payload as any).availableUntil = new Date(examData.availableUntil).toISOString();
+      else (payload as any).availableUntil = null;
 
       await examApi.createExam(payload);
       router.push('/teacher/exams');
@@ -206,6 +224,30 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
               value={examData.description}
               onChange={(e) => setExamData({ ...examData, description: e.target.value })}
               className="input-field py-4 min-h-[120px]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
+              Exam Start (optional)
+            </label>
+            <input
+              type="datetime-local"
+              value={examData.availableFrom}
+              onChange={(e) => setExamData({ ...examData, availableFrom: e.target.value })}
+              className="input-field py-4"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-2">
+              Exam End (optional)
+            </label>
+            <input
+              type="datetime-local"
+              value={examData.availableUntil}
+              onChange={(e) => setExamData({ ...examData, availableUntil: e.target.value })}
+              className="input-field py-4"
             />
           </div>
 
