@@ -7,6 +7,7 @@ interface LessonCardProps {
   lesson: {
     _id: string;
     courseId?: string;
+    course?: any; // Added to fix build error as it is accessed on line 25
     title: string;
     description?: string;
     videoUrl?: string;
