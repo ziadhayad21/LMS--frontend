@@ -77,12 +77,18 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
         )}
 
         <div className="flex items-center gap-3">
-          <Link
-            href={videoPath}
-            className="flex-1 bg-slate-900 hover:bg-primary-600 text-white text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
-          >
-            <Video className="w-4 h-4" /> Watch Lesson
-          </Link>
+          {videoPath ? (
+            <Link
+              href={videoPath}
+              className="flex-1 bg-slate-900 hover:bg-primary-600 text-white text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+            >
+              <Video className="w-4 h-4" /> Watch Lesson
+            </Link>
+          ) : (
+            <button className="flex-1 bg-slate-100 text-slate-400 text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 cursor-not-allowed">
+              <Video className="w-4 h-4" /> No Video
+            </button>
+          )}
 
           {pdfUrl && (
             <a

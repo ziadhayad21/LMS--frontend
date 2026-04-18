@@ -63,6 +63,7 @@ const config: Config = {
         slideUp: { '0%': { transform: 'translateY(30px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
         pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.8' } },
+        shimmer: { '100%': { transform: 'translateX(100%)' } },
       },
       boxShadow: {
         'premium': '0 25px 50px -12px rgba(99, 102, 241, 0.25)',

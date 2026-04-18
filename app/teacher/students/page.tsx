@@ -16,9 +16,10 @@ async function fetchStudents(token: string) {
     const res: any = await api.get('/auth/students', {
       headers: { Cookie: `jwt=${token}` },
     });
-    return res.data?.students ?? [];
+    return res.data?.students || res.students || [];
   } catch (error) {
-    return null;
+    console.error('Fetch error:', error);
+    return []; // Return empty array instead of null to prevent redirect loop
   }
 }
 
