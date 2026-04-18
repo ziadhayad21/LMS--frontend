@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+// Build Version: 2026.04.18.2018 (Force Refresh)
+
 export const metadata: Metadata = {
   title: 'Mr Abdallah Elhayad — English Mastery',
   description: 'Welcome to the official learning platform of Mr Abdallah Elhayad.',
