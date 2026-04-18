@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Users, Trash2, ShieldCheck, Mail, Calendar } from 'lucide-react';
+import { Users, ShieldCheck, Mail, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import StudentDeleteButton from '@/components/dashboard/StudentDeleteButton';
 
 export const metadata: Metadata = {
   title: 'Students Management',
@@ -116,17 +117,7 @@ export default async function StudentsManagementPage({
                     </span>
                   </td>
                   <td className="px-10 py-7 text-right">
-                    <Link
-                      href={`/teacher/students?deleteId=${student._id}`}
-                      className="inline-flex items-center justify-center w-12 h-12 bg-white hover:bg-rose-50 text-slate-300 hover:text-rose-500 border border-slate-100 hover:border-rose-100 rounded-2xl transition-all shadow-sm active:scale-90 group/btn"
-                      onClick={(e) => {
-                         if(!confirm('Are you absolutely sure you want to delete this student and all their data?')) {
-                           e.preventDefault();
-                         }
-                      }}
-                    >
-                      <Trash2 className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                    </Link>
+                    <StudentDeleteButton id={student._id} name={student.name} />
                   </td>
                 </tr>
               ))}
