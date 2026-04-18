@@ -3,38 +3,33 @@ import LoginForm from './LoginForm';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Sign In — EnglishPro Premium LMS',
-  description: 'Log in to your high-performance English learning environment.',
+  title: 'Sign In — Mr Abdallah Elhayad',
+  description: 'Log in to your premium English learning environment.',
 };
 
 export default function LoginPage() {
   return (
-    <div className="relative min-h-screen bg-slate-50 flex items-center justify-center p-6 lg:p-12 overflow-hidden">
+    <div className="relative min-h-screen bg-[#fcfdff] flex items-center justify-center p-6 lg:p-12 overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-mesh opacity-20 pointer-events-none -z-10" />
-      <div className="absolute top-[20%] -left-20 w-[400px] h-[400px] bg-brand-200/30 rounded-full blur-[100px] pointer-events-none -z-10 animate-pulse-glow" />
-      <div className="absolute top-[40%] -right-20 w-[600px] h-[600px] bg-accent-100/40 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse-glow" />
+      <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-primary-100/40 rounded-full blur-[120px] pointer-events-none -z-10 animate-float" />
 
       <div className="w-full max-w-lg lg:max-w-xl animate-fade-in">
         <div className="text-center mb-10 space-y-4">
           <Link href="/" className="inline-flex flex-col items-center gap-4 group">
-            <div className="w-16 h-16 bg-gradient-to-tr from-brand-700 to-accent-600 rounded-[24px] flex items-center justify-center shadow-2xl shadow-brand-500/30 ring-4 ring-white/60 group-hover:scale-110 transition-transform duration-300">
-              <span className="text-white font-black text-2xl tracking-tighter">EP</span>
+            <div className="w-16 h-16 bg-slate-900 rounded-[24px] flex items-center justify-center shadow-premium ring-4 ring-white/60 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-white font-black text-2xl tracking-tighter">AE</span>
             </div>
             <div className="space-y-1">
-              <span className="font-display font-black text-slate-950 text-2xl tracking-tighter uppercase block">EnglishPro Dashboard</span>
-              <span className="text-xs font-black text-brand-600 uppercase tracking-[0.2em]">Authorized Access Only</span>
+              <span className="font-display font-black text-slate-950 text-2xl tracking-tighter uppercase block">Student Dashboard</span>
+              <span className="text-xs font-black text-primary-600 uppercase tracking-[0.2em]">Authorized Access</span>
             </div>
           </Link>
         </div>
 
-        <div className="relative glass p-10 rounded-[40px] border-white/60 shadow-2xl shadow-brand-900/5 animate-scale-in">
-          <div className="absolute -top-10 -left-10 w-24 h-24 bg-brand-500/10 rounded-full blur-[40px] pointer-events-none animate-pulse-glow" />
-          <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-accent-500/10 rounded-full blur-[40px] pointer-events-none animate-pulse-glow" />
-
+        <div className="relative bg-white p-10 rounded-[3rem] border border-slate-100 shadow-premium animate-fade-in">
           <div className="mb-8 text-center sm:text-left">
-            <h1 className="font-display text-3xl font-black text-slate-900 leading-none">Elevate Your Fluency</h1>
-            <p className="mt-3 text-slate-500 font-bold text-sm tracking-tight">Access your custom curriculum and track your progress with Mr Abdallah Elhayad.</p>
+            <h1 className="font-display text-3xl font-black text-slate-900 leading-none">Welcome Back</h1>
+            <p className="mt-3 text-slate-500 font-bold text-sm tracking-tight">Access your curriculum and track progress with Mr Abdallah Elhayad.</p>
           </div>
 
           <LoginForm />

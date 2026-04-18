@@ -40,31 +40,33 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
       : null;
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-soft hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 overflow-hidden group">
+    <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft hover:shadow-premium hover:-translate-y-1.5 transition-all duration-500 overflow-hidden group">
       {/* Visual Header */}
       <div className="relative aspect-[21/9] bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 group-hover:bg-primary-500 group-hover:border-primary-400 transition-all duration-500 z-20">
-            <Play className="w-6 h-6 text-white ml-1" />
+          <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 group-hover:bg-primary-600 group-hover:border-primary-400 transition-all duration-500 z-20">
+            <Play className="w-6 h-6 text-white ml-1 fill-white" />
           </div>
         </div>
-        {/* Abstract background shape */}
-        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-primary-500/10 rounded-full blur-2xl" />
+        {/* Animated accent gradient */}
+        <div className="absolute top-0 right-0 -mr-10 -mt-10 w-48 h-48 bg-primary-500/20 rounded-full blur-3xl animate-pulse-soft" />
       </div>
 
       {/* Content */}
       <div className="p-8">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-black uppercase tracking-widest rounded-full border border-indigo-100">
-            {lesson.level || 'Academic'}
-          </span>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 bg-primary-50 text-primary-700 text-[10px] font-black uppercase tracking-widest rounded-full border border-primary-100">
+              {lesson.level || 'Academic'}
+            </span>
+          </div>
           <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
             {lesson.createdAt ? new Date(lesson.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Curriculum'}
           </span>
         </div>
 
-        <h3 className="text-xl font-black text-slate-800 leading-tight mb-3 group-hover:text-primary-600 transition-colors tracking-tight font-display">
+        <h3 className="text-xl font-black text-slate-900 leading-tight mb-3 group-hover:text-primary-600 transition-colors tracking-tight font-display">
           {lesson.title}
         </h3>
 
@@ -77,7 +79,7 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
         <div className="flex items-center gap-3">
           <Link
             href={videoPath}
-            className="flex-1 bg-slate-900 hover:bg-black text-white text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+            className="flex-1 bg-slate-900 hover:bg-primary-600 text-white text-[11px] font-black uppercase tracking-widest py-4 px-6 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
           >
             <Video className="w-4 h-4" /> Watch Lesson
           </Link>
@@ -87,10 +89,10 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
               href={`/pdf-viewer?url=${encodeURIComponent(pdfUrl)}&title=${encodeURIComponent(lesson.pdfFile?.originalName || 'Lesson PDF')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-14 h-14 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100 rounded-2xl flex items-center justify-center transition-all group/pdf shadow-sm shadow-rose-100 hover:shadow-xl hover:shadow-rose-500/10 active:scale-95"
+              className="w-14 h-14 bg-white hover:bg-rose-50 text-rose-500 border border-slate-200 hover:border-rose-100 rounded-2xl flex items-center justify-center transition-all group/pdf shadow-sm active:scale-95"
               title="Download Materials (PDF)"
             >
-              <FileText className="w-6 h-6" />
+              <FileText className="w-6 h-6 group-hover/pdf:scale-110 transition-transform" />
             </a>
           )}
         </div>

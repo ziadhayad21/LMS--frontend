@@ -8,6 +8,7 @@
     --foreground: 222.2 84% 4.9%;
     --primary: 239 84% 67%; /* Vibrant Indigo */
     --primary-foreground: 210 40% 98%;
+    --brand-primary: #4f46e5;
   }
 
   .dark {
@@ -22,7 +23,7 @@
   }
 
   body {
-    @apply bg-slate-50/60 text-slate-900 selection:bg-primary-100 selection:text-primary-950 font-sans;
+    @apply bg-[#fcfdff] text-slate-900 selection:bg-primary-100 selection:text-primary-950 font-sans;
   }
 }
 

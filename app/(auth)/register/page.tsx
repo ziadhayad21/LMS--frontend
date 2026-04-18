@@ -3,38 +3,33 @@ import RegisterForm from './RegisterForm';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Apply For Access — EnglishPro Premium LMS',
-  description: 'Begin your journey towards English mastery on the world\'s most professional platform.',
+  title: 'Join the Academy — Mr Abdallah Elhayad',
+  description: 'Begin your journey towards English mastery with Mr Abdallah Elhayad.',
 };
 
 export default function RegisterPage() {
   return (
-    <div className="relative min-h-screen bg-slate-50 flex items-center justify-center p-6 lg:p-12 overflow-hidden">
+    <div className="relative min-h-screen bg-[#fcfdff] flex items-center justify-center p-6 lg:p-12 overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-mesh opacity-20 pointer-events-none -z-10" />
-      <div className="absolute bottom-[20%] -right-20 w-[400px] h-[400px] bg-brand-200/30 rounded-full blur-[100px] pointer-events-none -z-10 animate-pulse-glow" />
-      <div className="absolute top-[30%] -left-20 w-[600px] h-[600px] bg-accent-100/40 rounded-full blur-[120px] pointer-events-none -z-10 animate-pulse-glow" />
+      <div className="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-primary-100/40 rounded-full blur-[120px] pointer-events-none -z-10 animate-float" />
 
       <div className="w-full max-w-lg lg:max-w-xl animate-fade-in py-12">
         <div className="text-center mb-10 space-y-4">
           <Link href="/" className="inline-flex flex-col items-center gap-4 group">
-            <div className="w-16 h-16 bg-gradient-to-tr from-brand-700 to-accent-600 rounded-[24px] flex items-center justify-center shadow-2xl shadow-brand-500/30 ring-4 ring-white/60 group-hover:scale-110 transition-transform duration-300">
-              <span className="text-white font-black text-2xl tracking-tighter">EP</span>
+            <div className="w-16 h-16 bg-slate-900 rounded-[24px] flex items-center justify-center shadow-premium ring-4 ring-white/60 group-hover:scale-110 transition-transform duration-300">
+              <span className="text-white font-black text-2xl tracking-tighter">AE</span>
             </div>
             <div className="space-y-1">
               <span className="font-display font-black text-slate-950 text-2xl tracking-tighter uppercase block">Create Your Profile</span>
-              <span className="text-xs font-black text-brand-600 uppercase tracking-[0.2em]">Join the Elite Community</span>
+              <span className="text-xs font-black text-primary-600 uppercase tracking-[0.2em]">English Mastery Platform</span>
             </div>
           </Link>
         </div>
 
-        <div className="relative glass p-10 rounded-[40px] border-white/60 shadow-2xl shadow-brand-900/5 animate-scale-in">
-          <div className="absolute -top-10 -right-10 w-24 h-24 bg-brand-500/10 rounded-full blur-[40px] pointer-events-none animate-pulse-glow" />
-          <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-accent-500/10 rounded-full blur-[40px] pointer-events-none animate-pulse-glow" />
-
-          <div className="mb-8 text-center sm:text-left">
+        <div className="relative bg-white p-10 rounded-[3rem] border border-slate-100 shadow-premium animate-fade-in">
+          <div className="mb-8 text-center">
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">Join the Academy</h1>
-            <p className="text-slate-500 font-medium whitespace-pre-line">Create your official Mr Abdallah Elhayad student account</p>
+            <p className="text-slate-500 font-medium">Create your student account to access premium lessons</p>
           </div>
 
           <RegisterForm />
