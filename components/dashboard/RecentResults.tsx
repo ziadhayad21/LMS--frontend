@@ -16,7 +16,7 @@ interface Props {
 
 export default function RecentResults({ results }: Props) {
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft">
+    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-black text-slate-800 tracking-tight font-display">Recent History</h2>

@@ -169,7 +169,7 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-12 animate-fade-in-up">
       {/* 1. Basic Information */}
-      <section className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-soft relative overflow-hidden group">
+      <section className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-premium relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600 transition-all group-hover:w-3" />
         <div className="flex items-center gap-4 mb-8">
           <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 border border-indigo-100">
@@ -316,7 +316,7 @@ export default function ExamUploadForm({ }: ExamUploadFormProps) {
           {questions.map((question, qIndex) => (
             <div
               key={qIndex}
-              className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft hover:border-indigo-100 transition-all group/q"
+              className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium hover:border-indigo-100 transition-all group/q"
             >
               <div className="flex items-start justify-between mb-8">
                 <div className="flex items-center gap-3">

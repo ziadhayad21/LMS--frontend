@@ -20,7 +20,7 @@ export default function TeacherExamCard({ exam }: { exam: Exam & { course?: any;
     : `/teacher/exams/${exam._id}`;
 
   return (
-    <div className="bg-white rounded-[2.5rem] p-7 border border-slate-100 shadow-soft hover:shadow-xl transition-all">
+    <div className="bg-white rounded-[2.5rem] p-7 border border-slate-100 shadow-premium hover:shadow-xl transition-all">
       <div className="flex items-start justify-between gap-3">
         <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center border border-amber-100">
           <FileText className="w-6 h-6 text-amber-600" />

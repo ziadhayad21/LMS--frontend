@@ -123,7 +123,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
   if (result) {
     return (
       <div className="max-w-3xl mx-auto animate-scale-in">
-        <div className="bg-white rounded-[3.5rem] p-12 text-center border border-slate-100 shadow-soft relative overflow-hidden">
+        <div className="bg-white rounded-[3.5rem] p-12 text-center border border-slate-100 shadow-premium relative overflow-hidden">
           {/* Confetti-like background decor */}
           <div className="absolute top-0 left-0 w-32 h-32 bg-indigo-50/50 rounded-br-full -z-10" />
           <div className="absolute bottom-0 right-0 w-48 h-48 bg-emerald-50/50 rounded-tl-full -z-10" />
@@ -189,7 +189,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
   if (windowClosed) {
     return (
       <div className="max-w-3xl mx-auto animate-fade-in">
-        <div className="bg-white rounded-[3.5rem] p-12 text-center border border-slate-100 shadow-soft">
+        <div className="bg-white rounded-[3.5rem] p-12 text-center border border-slate-100 shadow-premium">
           <h2 className="text-2xl font-black text-slate-800 tracking-tight font-display">Exam Closed</h2>
           <p className="text-slate-500 font-medium mt-3">The scheduled time window for this exam has ended.</p>
           <div className="mt-8">
@@ -208,7 +208,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
   return (
     <div className="max-w-5xl mx-auto space-y-12">
       {/* Proctoring banner */}
-      <div className="rounded-3xl border border-slate-100 bg-white shadow-soft p-4 flex items-center justify-between gap-4 flex-wrap">
+      <div className="rounded-3xl border border-slate-100 bg-white shadow-premium p-4 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className={`w-3 h-3 rounded-full ${proctor.isFullscreen ? 'bg-emerald-500' : 'bg-amber-500'}`} />
           <p className="text-sm font-bold text-slate-700">
@@ -251,7 +251,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
 
         <div className="flex items-center gap-6">
           {timeLeft !== null && (
-            <div className={`flex items-center gap-4 px-6 py-4 rounded-[2rem] shadow-soft border group transition-colors ${timeLeft < 120 ? 'bg-rose-50 border-rose-100/50' : 'bg-white border-slate-100'}`}>
+            <div className={`flex items-center gap-4 px-6 py-4 rounded-[2rem] shadow-premium border group transition-colors ${timeLeft < 120 ? 'bg-rose-50 border-rose-100/50' : 'bg-white border-slate-100'}`}>
               <Clock className={`w-5 h-5 group-hover:scale-110 transition-transform ${timeLeft < 120 ? 'text-rose-500 animate-pulse' : 'text-slate-400'}`} />
               <div className="leading-none">
                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Time Remaining</p>
@@ -281,7 +281,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-start">
         {/* Navigation Sidebar */}
         <div className="lg:col-span-1 space-y-6">
-           <div className="bg-white rounded-[2.5rem] p-6 border border-slate-100 shadow-soft">
+           <div className="bg-white rounded-[2.5rem] p-6 border border-slate-100 shadow-premium">
               <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 px-2">Questions</h5>
               <div className="grid grid-cols-4 gap-3">
                  {exam.questions.map((_: any, idx: number) => (
@@ -315,7 +315,7 @@ export default function ExamTaker({ courseId, exam }: ExamTakerProps) {
 
         {/* Main Interface */}
         <div className="lg:col-span-3 space-y-8 animate-fade-in-up">
-           <div className="bg-white rounded-[3.5rem] p-10 border border-slate-100 shadow-soft relative overflow-hidden group">
+           <div className="bg-white rounded-[3.5rem] p-10 border border-slate-100 shadow-premium relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600 -z-10 group-hover:w-3 transition-all duration-300" />
               
               <div className="mb-10">

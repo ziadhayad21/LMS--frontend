@@ -12,7 +12,7 @@ export default function ExamCard({ courseId, exam, attemptCount = 0 }: ExamCardP
   const isAvailable = true; // For now
   
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft hover:shadow-2xl hover:border-indigo-100 transition-all duration-300 group relative overflow-hidden">
+    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium hover:shadow-2xl hover:border-indigo-100 transition-all duration-300 group relative overflow-hidden">
       {/* Decorative Gradient Background */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-500" />
 

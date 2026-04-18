@@ -76,7 +76,7 @@ export default async function TeacherDashboardPage({
 
       {/* Simplified Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft flex items-center gap-6">
+        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium flex items-center gap-6">
           <div className="w-20 h-20 bg-amber-50 rounded-[1.8rem] flex items-center justify-center text-amber-500">
             <Clock className="w-10 h-10" />
           </div>
@@ -86,7 +86,7 @@ export default async function TeacherDashboardPage({
           </div>
         </div>
 
-        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft flex items-center gap-6">
+        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium flex items-center gap-6">
           <div className="w-20 h-20 bg-indigo-50 rounded-[1.8rem] flex items-center justify-center text-indigo-500">
             <Users className="w-10 h-10" />
           </div>
@@ -107,7 +107,7 @@ export default async function TeacherDashboardPage({
         </div>
 
         {pendingStudents.length === 0 ? (
-          <div className="bg-white rounded-[3rem] p-24 text-center border border-slate-100 shadow-soft">
+          <div className="bg-white rounded-[3rem] p-24 text-center border border-slate-100 shadow-premium">
             <div className="w-24 h-24 bg-emerald-50 rounded-[2.2rem] flex items-center justify-center mx-auto mb-8 shadow-sm">
               <UserCheck className="w-12 h-12 text-emerald-500 opacity-40" />
             </div>
@@ -115,7 +115,7 @@ export default async function TeacherDashboardPage({
             <p className="text-slate-400 text-lg">No pending student approvals at the moment.</p>
           </div>
         ) : (
-          <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden">
+          <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-slate-50/50 border-b border-slate-100">

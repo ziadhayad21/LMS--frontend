@@ -282,7 +282,7 @@ export default function StudentTrackingSection({
       </div>
 
       {students.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] p-16 text-center border border-slate-100 shadow-soft">
+        <div className="bg-white rounded-[2.5rem] p-16 text-center border border-slate-100 shadow-premium">
           <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="w-10 h-10 text-indigo-500 opacity-20" />
           </div>
@@ -290,7 +290,7 @@ export default function StudentTrackingSection({
           <p className="text-slate-400 text-sm mt-1">Students will appear here once they are approved and enrolled.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft overflow-hidden">
+        <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-premium overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>

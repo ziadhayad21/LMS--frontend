@@ -92,7 +92,7 @@ export default async function StudentDashboard() {
             </div>
 
             {progresses.length === 0 ? (
-              <div className="bg-white rounded-[2.5rem] p-16 text-center border border-slate-100 shadow-soft">
+              <div className="bg-white rounded-[2.5rem] p-16 text-center border border-slate-100 shadow-premium">
                 <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Book className="w-10 h-10 text-indigo-500 opacity-20" />
                 </div>
@@ -105,7 +105,7 @@ export default async function StudentDashboard() {
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {progresses.map((p: any) => (
-                  <div key={p._id} className="bg-white rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border border-slate-100 shadow-soft hover:shadow-xl hover:border-indigo-100 transition-all duration-300 group">
+                  <div key={p._id} className="bg-white rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border border-slate-100 shadow-premium hover:shadow-xl hover:border-indigo-100 transition-all duration-300 group">
                     <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center shrink-0 border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
                       <Book className="w-6 h-6 text-slate-400 group-hover:text-indigo-600" />
                     </div>

@@ -51,7 +51,7 @@ export default async function StudentLessonsPage() {
       </div>
 
       {lessons.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] p-20 text-center border border-slate-100 shadow-soft">
+        <div className="bg-white rounded-[2.5rem] p-20 text-center border border-slate-100 shadow-premium">
           <p className="text-4xl mb-4 opacity-20">📚</p>
           <p className="text-slate-600 font-black text-lg">Knowledge is on its way.</p>
           <p className="text-slate-400 text-sm mt-1">No lessons are available for your level at this moment.</p>

@@ -53,7 +53,7 @@ export default function SuccessBoardPage() {
                         const pos = positions[orderIndex];
 
                         return (
-                            <div key={item._id} className={`relative flex flex-col items-center p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-soft transform transition-all hover:-translate-y-2 duration-500 ${orderIndex === 0 ? 'md:order-2 shadow-2xl' : index === 1 ? 'md:order-1' : 'md:order-3'}`}>
+                            <div key={item._id} className={`relative flex flex-col items-center p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-premium transform transition-all hover:-translate-y-2 duration-500 ${orderIndex === 0 ? 'md:order-2 shadow-2xl' : index === 1 ? 'md:order-1' : 'md:order-3'}`}>
                                 <div className={`w-20 h-20 rounded-3xl overflow-hidden mb-4 border-4 ${pos.border} shadow-lg`}>
                                     {item.avatar ? (
                                         <img src={item.avatar} alt={item.name} className="w-full h-full object-cover" />
@@ -92,7 +92,7 @@ export default function SuccessBoardPage() {
             </div>
 
             {/* Full Leaderboard List */}
-            <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-soft overflow-hidden">
+            <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-premium overflow-hidden">
                 <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400">

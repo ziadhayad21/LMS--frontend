@@ -17,7 +17,7 @@ export default function ProgressChart({ progresses }: Props) {
   const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
   return (
-    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-soft">
+    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-premium">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-black text-slate-800 tracking-tight font-display">Learning Curve</h2>

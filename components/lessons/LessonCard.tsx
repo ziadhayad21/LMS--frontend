@@ -40,7 +40,7 @@ export default function LessonCard({ lesson, mode = 'student' }: LessonCardProps
       : null;
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft hover:shadow-premium hover:-translate-y-1.5 transition-all duration-500 overflow-hidden group">
+    <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-premium hover:shadow-premium hover:-translate-y-1.5 transition-all duration-500 overflow-hidden group">
       {/* Visual Header */}
       <div className="relative aspect-[21/9] bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10" />

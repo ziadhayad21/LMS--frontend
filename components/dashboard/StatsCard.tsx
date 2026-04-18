@@ -18,7 +18,7 @@ const colorMap = {
 export default function StatsCard({ label, value, icon: Icon, color }: Props) {
   const c = colorMap[color];
   return (
-    <div className="bg-white rounded-[2.5rem] p-6 lg:p-8 flex items-center gap-5 border border-slate-100 shadow-soft hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group">
+    <div className="bg-white rounded-[2.5rem] p-6 lg:p-8 flex items-center gap-5 border border-slate-100 shadow-premium hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group">
       <div className={clsx('w-14 lg:w-16 h-14 lg:h-16 rounded-3xl flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:scale-110 shadow-sm border p-4', c.bg, c.border, c.text)}>
         {typeof Icon === 'string' ? <span className="text-2xl">{Icon}</span> : <Icon className="w-full h-full" />}
       </div>

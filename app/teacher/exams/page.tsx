@@ -47,7 +47,7 @@ export default async function TeacherExamsPage() {
       </div>
 
       {exams.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-soft p-12 text-center">
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-premium p-12 text-center">
           <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
             <Trophy className="w-8 h-8" />
           </div>
