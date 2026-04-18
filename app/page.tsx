@@ -27,21 +27,16 @@ export default function HomePage() {
           </div>
           
           <div className="space-y-6">
-            <h1 className="font-display text-5xl md:text-8xl font-black text-slate-900 tracking-tightest leading-[0.85]">
+            <h1 className="font-display text-7xl md:text-9xl font-black text-slate-900 tracking-tightest leading-[0.8]">
               Mr Abdallah <br />
               <span className="text-primary-600 block mt-2">Elhayad</span>
             </h1>
-            <div className="flex flex-col items-center gap-3">
-              <h2 className="text-2xl md:text-3xl font-black text-slate-700" dir="rtl">
-                مستر عبدالله الهياد
-              </h2>
-              <div className="flex items-center justify-center gap-4">
-                <div className="h-[1px] w-8 bg-slate-200" />
-                <p className="text-xs font-black text-slate-400 uppercase tracking-[0.5em]">
-                   English Language Consultant
-                </p>
-                <div className="h-[1px] w-8 bg-slate-200" />
-              </div>
+            <div className="flex items-center justify-center gap-4">
+              <div className="h-[1px] w-12 bg-slate-200" />
+              <p className="text-sm font-black text-slate-400 uppercase tracking-[0.6em]">
+                 English Language Consultant
+              </p>
+              <div className="h-[1px] w-12 bg-slate-200" />
             </div>
           </div>
         </div>
