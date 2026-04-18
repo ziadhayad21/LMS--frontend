@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Users, ShieldCheck, Mail, Calendar } from 'lucide-react';
+import { Users, ShieldCheck, Mail, Calendar, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import StudentDeleteButton from '@/components/dashboard/StudentDeleteButton';
 
