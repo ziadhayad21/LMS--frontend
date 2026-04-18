@@ -2,7 +2,8 @@ import { Layout, BookOpen, PlusCircle, Trophy, Users, Award } from 'lucide-react
 
 export const TEACHER_NAV_ITEMS = [
     { href: '/teacher/dashboard', icon: Layout, label: 'Dashboard' },
-    { href: '/teacher/tracking', icon: Users, label: 'Student Tracking' },
+    { href: '/teacher/students', icon: Users, label: 'Students Management' },
+    { href: '/teacher/tracking', icon: Award, label: 'Student Tracking' },
     { href: '/teacher/courses', icon: BookOpen, label: 'ALL Courses' },
     { href: '/teacher/exams', icon: Trophy, label: 'Manage Exams' },
 ];
